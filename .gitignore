@@ -33,3 +33,6 @@
 
 # FTXUI
 ftxui-5.0.0-win64/**
+
+# Misc ?
+.vs/**
