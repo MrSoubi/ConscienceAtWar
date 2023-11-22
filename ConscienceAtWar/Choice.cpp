@@ -6,3 +6,7 @@ Choice::Choice(string text, vector<Condition*> conditions, vector<Action*> actio
 	this->actions = actions;
 	this->timeOffSet = timeOffSet;
 }
+
+void Choice::Display() {
+	cout << text << endl;
+}

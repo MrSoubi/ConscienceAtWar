@@ -5,6 +5,8 @@ class Scene
 public:
 	string name;
 	vector<Paragraph> paragraphs;
-	vector<Choice> actions;
+	vector<Choice> choices;
 	int timer;
+
+	void Display();
 };

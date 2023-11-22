@@ -9,4 +9,6 @@ public:
 	int timeOffSet;
 
 	Paragraph(string text, vector<Condition*> conditions, vector<Action*> actions, int timeOffSet);
+	void Display();
+
 };

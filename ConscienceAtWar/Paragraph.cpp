@@ -6,3 +6,7 @@ Paragraph::Paragraph(string text, vector<Condition*> conditions, vector<Action*>
 	this->actions = actions;
 	this->timeOffSet = timeOffSet;
 }
+
+void Paragraph::Display() {
+	cout << text << endl;
+}

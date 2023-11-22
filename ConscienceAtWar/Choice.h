@@ -10,4 +10,5 @@ public:
 	int timeOffSet;
 
 	Choice(string text, vector<Condition*> conditions, vector<Action*> actions, int timeOffSet);
+	void Display();
 };
