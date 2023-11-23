@@ -132,6 +132,7 @@
     <ClInclude Include="Condition.h" />
     <ClInclude Include="GlobalHeader.h" />
     <ClInclude Include="Paragraph.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +140,11 @@
     <ClCompile Include="Choice.cpp" />
     <ClCompile Include="Condition.cpp" />
     <ClCompile Include="Paragraph.cpp" />
+    <ClCompile Include="Program.cpp" />
     <ClCompile Include="Scene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ConscienceAtWar.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
