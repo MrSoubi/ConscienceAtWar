@@ -31,5 +31,8 @@ void Scene::Display(vector<Scene> scene) {
 				}
 			}
 		}
+		else {
+			this->Display(scene);
+		}
 	}
 }
