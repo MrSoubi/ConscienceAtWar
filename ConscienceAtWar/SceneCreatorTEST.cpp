@@ -29,24 +29,15 @@ int main(){
 
 	vector<Paragraph> scene1paragraphs; // Paragraph scene 1
 	vector<Choice> scene1choices; // choices scene 1
-	
-	Scene scene1; // creation scene 1
 
-	scene1.NewScene("Scene1", scene1paragraphs, scene1choices, 15);
+	Scene scene1 = Scene("Scene1", scene1paragraphs, scene1choices, 15);
 
-	Paragraph scene1paragraph1;
-	Paragraph scene1paragraph2;
+	Paragraph scene1paragraph1 = Paragraph("Bonjour et bienvenue !", conditions, actions, 0);
+	Paragraph scene1paragraph2 = Paragraph("il vous reste 5s", conditions, actions, 5);
 
-	scene1paragraph1.NewParagraph("Bonjour et bienvenue !", conditions, actions, 0);
-	scene1paragraph2.NewParagraph("il vous reste 5s", conditions, actions, 5);
-
-	Choice scene1choice1;
-	Choice scene1choice2;
-	Choice scene1choice3;
-
-	scene1choice1.NewChoice("Bonjour et merci !", conditions, actions, 0, "Scene1");
-	scene1choice2.NewChoice("...", conditions, actions, 0, "Scene1");
-	scene1choice3.NewChoice("j'y arrive pas", conditions, actions, 5, "Scene1");
+	Choice scene1choice1 = Choice("Bonjour et merci !", conditions, actions, 0, "Scene1");
+	Choice scene1choice2 = Choice("...", conditions, actions, 0, "Scene1");
+	Choice scene1choice3 = Choice("j'y arrive pas", conditions, actions, 5, "Scene1");
 
 	scene1paragraphs.push_back(scene1paragraph1);
 	scene1paragraphs.push_back(scene1paragraph2);
@@ -55,7 +46,7 @@ int main(){
 	scene1choices.push_back(scene1choice2);
 	scene1choices.push_back(scene1choice3);
 
-	scene1.NewScene("Scene1", scene1paragraphs, scene1choices, 0);
+	scene1.Scene::Scene("Scene1", scene1paragraphs, scene1choices, 0);
 
 	allScenes.push_back(scene1);
 
