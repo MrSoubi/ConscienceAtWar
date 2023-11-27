@@ -1,7 +1,4 @@
-#include "GlobalHeader.h"
-#include "ReadFile.h"*
-#include "Program.h"
-#include "Scene.h"
+#include "ReadFile.h"
 
 vector<string> lignes;
 
@@ -18,9 +15,6 @@ void ReadFile::Start(string tmpTest) {
 	}*/
 
 	ReadFile::SetScene(tmpTest);
-
-	cout << scenes[0].name << endl;
-	cout << scenes[0].timer << endl;
 }
 
 void ReadFile::Read(string path) {
@@ -37,12 +31,21 @@ void ReadFile::Read(string path) {
 }
 
 void ReadFile::SetScene(string currentTxt) {
-	Scene currentScene = *new Scene;
+	string sceneName;
+	int sceneTime;
 
-	currentScene.name = ReadFile::FindSceneText(0, currentTxt);
-	currentScene.timer = ReadFile::GetNumber(posToContinueInContent, currentTxt);
 
-	scenes.push_back(currentScene);
+	//currentScene.name = ReadFile::FindSceneText(0, currentTxt);
+	//currentScene.timer = ReadFile::GetNumber(posToContinueInContent, currentTxt);
+	
+	string textInParagraph;
+	string conditionInParagraph;
+	string paragraphAction;
+	textInParagraph = ReadFile::FindSceneText(posToContinueInContent, currentTxt);
+
+	
+
+	//scenes.push_back(currentScene);
 }
 
 string ReadFile::FindSceneText(int posInContent, string content) {
@@ -51,13 +54,12 @@ string ReadFile::FindSceneText(int posInContent, string content) {
 	for (int i = posInContent; i < content.length(); i++)
 	{
 		if (content[i] == *";") {
-			posToContinueInContent = i ++;
+			posToContinueInContent = i+=1;
 			return txtRegister;
 		}
 		else txtRegister += content[i];
 	}
 }
-
 int ReadFile::GetNumber(int posInContent, string content) {
 	string txtRegister = "";
 	int numberGet = 0;
@@ -65,11 +67,10 @@ int ReadFile::GetNumber(int posInContent, string content) {
 	for (int i = posInContent; i < content.length(); i++)
 	{
 		if (content[i] == *";") {
-			posToContinueInContent = i++;
+			posToContinueInContent = i+=1;
 
 			if (txtRegister == "") {
 				numberGet = 0;
-				cout << "No text here" << endl;
 			}
 			else numberGet = stof(txtRegister);
 			return numberGet;

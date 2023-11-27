@@ -1,5 +1,5 @@
 #pragma once
-#include "GlobalHeader.h"
+#include "ReadFile.h"
 
 class Program {
 };

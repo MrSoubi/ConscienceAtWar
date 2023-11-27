@@ -1,5 +1,6 @@
 #pragma once
 #include "GlobalHeader.h"
+#include "Scene.h"
 
 class ReadFile
 {
