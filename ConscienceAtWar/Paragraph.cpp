@@ -1,6 +1,6 @@
 #include "Paragraph.h"
 
-void Paragraph::NewParagraph(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet) {
+Paragraph::Paragraph(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet) {
 	this->text = text;
 	this->conditions = conditions;
 	this->actions = actions;

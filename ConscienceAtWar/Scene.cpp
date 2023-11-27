@@ -1,5 +1,5 @@
 #include "Scene.h"
-void Scene::NewScene(string name, vector<Paragraph> paragraphs, vector<Choice> choices, int timer) {
+Scene::Scene(string name, vector<Paragraph> paragraphs, vector<Choice> choices, int timer) {
 	this->name = name;
 	this->paragraphs = paragraphs;
 	this->choices = choices;
