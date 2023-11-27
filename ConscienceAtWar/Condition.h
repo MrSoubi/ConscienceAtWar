@@ -1,3 +1,4 @@
+#pragma once
 #include "GlobalHeader.h"
 
 class Condition
