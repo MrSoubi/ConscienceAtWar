@@ -5,10 +5,12 @@ class Choice
 {
 public:
 	string text;
-	vector<Condition*> conditions;
-	vector<Action*> actions;
+	vector<Condition> conditions;
+	vector<Action> actions;
 	int timeOffSet;
+	string link;
 
-	Choice(string text, vector<Condition*> conditions, vector<Action*> actions, int timeOffSet);
+	void NewChoice(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet, string link);
+
 	void Display();
 };
