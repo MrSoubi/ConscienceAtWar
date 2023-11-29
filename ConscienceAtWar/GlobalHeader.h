@@ -6,7 +6,12 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include<chrono> 
+#include<thread>
 
 using namespace std;
 
 #endif
+
+static int karma;
+static vector<Condition> inventory;

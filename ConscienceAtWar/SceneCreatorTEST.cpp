@@ -32,7 +32,7 @@ int main(){
 
 	Scene scene1 = Scene("Scene1", scene1paragraphs, scene1choices, 15);
 
-	Paragraph scene1paragraph1 = Paragraph("Bonjour et bienvenue !", conditions, actions, 0);
+	Paragraph scene1paragraph1 = Paragraph("Bonjour et bienvenue !Bonjour et bienvenue !Bonjour et bienvenue !", conditions, actions, 0);
 	Paragraph scene1paragraph2 = Paragraph("il vous reste 5s", conditions, actions, 5);
 
 	Choice scene1choice1 = Choice("Bonjour et merci !", conditions, actions, 0, "Scene1");

@@ -1,5 +1,5 @@
 #include "Action.h"
 
-void Action::ActionName(string text) {
+Action::Action(string text) {
 	this->text = text;
 }

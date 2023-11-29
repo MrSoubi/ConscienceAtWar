@@ -10,7 +10,7 @@ void Scene::Display(vector<Scene> scene) {
 	cout << this->name << endl << endl;
 
 	for (Paragraph paragraph : paragraphs) {
-		paragraph.Display();
+		paragraph.Display(20);
 	}
 
 	cout << endl;

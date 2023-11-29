@@ -5,7 +5,8 @@ class Condition
 {
 public:
 	string name;
-	bool isInInventory = true;
 
-	void ConditionName(string name);
+	Condition(string name);
+
+	bool IsInInventory();
 };

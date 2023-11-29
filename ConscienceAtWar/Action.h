@@ -5,5 +5,5 @@ class Action
 public:
 	string text;
 
-	void ActionName(string text);
+	Action(string text);
 };
