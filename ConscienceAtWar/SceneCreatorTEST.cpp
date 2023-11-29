@@ -1,23 +1,23 @@
-#include "Scene.h"
+#include "SceneCreatorTEST.h"
+
+int SceneCreatorTEST::karma = 0;
+vector<Condition> SceneCreatorTEST::inventory = vector<Condition>{};
 
 int main(){
+
+
 	//Actions / Conditions TEST
 
 	vector<Scene> allScenes;
 	vector<Action> actions;
 	vector<Condition> conditions;
 
-	Action act_SniperAlive;
-	Action act_SniperDead;
 
-	Condition cond_SniperDead;
-	Condition cond_SniperAlive;
+	Action act_SniperAlive = Action("SniperAlive");
+	Action act_SniperDead = Action("SniperDead");
 
-	act_SniperAlive.ActionName("SniperAlive");
-	act_SniperDead.ActionName("SniperDead");
-
-	cond_SniperAlive.ConditionName("SniperAlive");
-	cond_SniperDead.ConditionName("sniperDead");
+	Condition cond_SniperAlive = Condition("SniperAlive");
+	Condition cond_SniperDead = Condition("sniperDead");
 
 	actions.push_back(act_SniperAlive);
 	actions.push_back(act_SniperDead);

@@ -132,8 +132,9 @@
     <ClInclude Include="Condition.h" />
     <ClInclude Include="GlobalHeader.h" />
     <ClInclude Include="Paragraph.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneCreatorTEST.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="Paragraph.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneCreatorTEST.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConscienceAtWar.rc" />

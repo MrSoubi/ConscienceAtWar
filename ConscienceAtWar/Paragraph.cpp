@@ -1,4 +1,5 @@
 #include "Paragraph.h"
+#include "utils.h"
 
 Paragraph::Paragraph(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet) {
 	this->text = text;
@@ -18,7 +19,15 @@ void Paragraph::Display(int delay) {
 void Paragraph::ApplyAction()
 {
 	for (int i = 0; i < actions.size(); i++) {
+		if (actions[i].IsAdditive() && utils::IsInInventory(actions[i].Text())) {
 
+		}
+		else if (actions[i].IsSubtractive() && utils::IsInInventory(actions[i].Text())) {
+
+		}
+		else {
+			cout << "Problem with ApplyAction().";
+		}
 	}
 }
 

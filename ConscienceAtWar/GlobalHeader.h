@@ -12,6 +12,3 @@
 using namespace std;
 
 #endif
-
-static int karma;
-static vector<Condition> inventory;
