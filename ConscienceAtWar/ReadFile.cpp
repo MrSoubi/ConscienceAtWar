@@ -31,56 +31,165 @@ void ReadFile::Read(string path) {
 }
 
 void ReadFile::SetScene(string currentTxt) {
+	vector<string> currentSceneContent = ReadFile::TidyUpScene(currentTxt);
+	
 	string sceneName;
-	int sceneTime;
+	int sceneTimer;
+	vector<Paragraph> sceneParagraph;
 
-
-	//currentScene.name = ReadFile::FindSceneText(0, currentTxt);
-	//currentScene.timer = ReadFile::GetNumber(posToContinueInContent, currentTxt);
-	
-	string textInParagraph;
-	string conditionInParagraph;
-	string paragraphAction;
-	textInParagraph = ReadFile::FindSceneText(posToContinueInContent, currentTxt);
-
-	
-
-	//scenes.push_back(currentScene);
-}
-
-string ReadFile::FindSceneText(int posInContent, string content) {
-	string txtRegister = "";
-
-	for (int i = posInContent; i < content.length(); i++)
+	for (int i = 0; i < currentSceneContent.size(); i++)
 	{
-		if (content[i] == *";") {
-			posToContinueInContent = i+=1;
-			return txtRegister;
+		switch (i) {
+		case 0:
+			sceneName = currentSceneContent[i];
+			break;
+		case 1:
+			sceneTimer = stof(currentSceneContent[i]);
+			break;
+		case 2:
+			sceneParagraph = ReadFile::SetParagraph(currentSceneContent[i]);
+			break;
 		}
-		else txtRegister += content[i];
 	}
 }
-int ReadFile::GetNumber(int posInContent, string content) {
-	string txtRegister = "";
-	int numberGet = 0;
 
-	for (int i = posInContent; i < content.length(); i++)
+vector<string> ReadFile::TidyUpScene(string content) {
+	vector<string> contentInScene;
+	string currentContent;
+
+	for (int i = 0; i < content.length(); i++)
 	{
 		if (content[i] == *";") {
-			posToContinueInContent = i+=1;
-
-			if (txtRegister == "") {
-				numberGet = 0;
-			}
-			else numberGet = stof(txtRegister);
-			return numberGet;
+			contentInScene.push_back(currentContent);
+			currentContent = "";
 		}
 		else {
-			txtRegister += content[i];
+			currentContent += content[i];
 		}
 	}
+
+	return contentInScene;
 }
 
+vector<Paragraph> ReadFile::SetParagraph(string currentTxt) {
+	vector<Paragraph> allParagraph;
+	int cursorHelper = 0;
+	string currentTxtregister;
+
+	string paragraphTxt;
+	vector <Condition> condition;
+	vector <Action> action;
+	int timeOffset = 0;
+
+	bool isReading = false;
+
+	for (int i = 0; i < currentTxt.length(); i++)
+	{
+		if (currentTxt[i] == *"]" && currentTxt[i + 1] == *"]") {
+			if (cursorHelper == 0) {
+				if(!currentTxtregister.empty()) timeOffset = stof(currentTxtregister);
+				currentTxtregister = "";
+			}
+			else if (cursorHelper == 1) {
+				if (!currentTxtregister.empty()) condition = ReadFile::ReadCondition(currentTxtregister);
+				currentTxtregister = "";
+			}
+			else if (cursorHelper == 2) {
+				if (!currentTxtregister.empty()) action = ReadFile::ReadAction(currentTxtregister);
+				currentTxtregister = "";
+			}
+
+			cursorHelper += 1;
+			isReading = false;
+			i += 1;
+		}
+		else if (isReading) currentTxtregister += currentTxt[i];
+		else if (currentTxt[i] == *"[" && currentTxt[i + 1] == *"[") {
+			if (i != 0) {
+				paragraphTxt += currentTxtregister;
+
+				Paragraph paragraph = *new Paragraph(paragraphTxt, condition, action, timeOffset);
+				allParagraph.push_back(paragraph);
+				cursorHelper = 0;
+			}
+			currentTxtregister = "";
+			isReading = true;
+			i += 1;
+		}
+		else currentTxtregister += currentTxt[i];
+	}
+
+	paragraphTxt += currentTxtregister;
+
+	Paragraph paragraph = *new Paragraph(paragraphTxt, condition, action, timeOffset);
+	allParagraph.push_back(paragraph);
+
+	for (int i = 0; i < allParagraph.size(); i++){
+	
+		cout << endl << "NEW PARAGRAPH :" << endl;
+
+		cout << allParagraph[i].text << endl;
+		cout << allParagraph[i].timeOffSet << endl;
+
+		if(allParagraph[i].conditions.size() > 0) cout << "CONCITION :" << endl;
+		for (int i = 0; i < allParagraph[i].conditions.size(); i++)
+		{
+			cout << allParagraph[i].conditions[i].name << endl;
+		}
+		if (allParagraph[i].actions.size() > 0) cout << "ACTIONS :" << endl;
+		for (int i = 0; i < allParagraph[i].actions.size(); i++)
+		{
+			cout << allParagraph[i].conditions[i].name << endl;
+		}
+	}
+
+	return allParagraph;
+}
+
+vector<Condition> ReadFile::ReadCondition(string currenttxt) {
+	vector<Condition> conditions;
+	Condition currentCondition;
+	string currentConditionTxt;
+
+	for (int i = 0; i < currenttxt.length(); i++)
+	{
+		if (currenttxt[i] == *",") {
+			currentCondition.name = currentConditionTxt;
+			conditions.push_back(currentCondition);
+			currentConditionTxt = "";
+		}
+		else {
+			currentConditionTxt += currentConditionTxt[i];
+		}
+	}
+
+	currentCondition.name = currentConditionTxt;
+	conditions.push_back(currentCondition);
+
+	return conditions;
+}
+vector<Action> ReadFile::ReadAction(string currenttxt) {
+	vector<Action> actions;
+	Action currentAction;
+	string currentActionTxt;
+
+	for (int i = 0; i < currenttxt.length(); i++)
+	{
+		if (currenttxt[i] == *",") {
+			currentAction.text = currentActionTxt;
+			actions.push_back(currentAction);
+			currentActionTxt = "";
+		}
+		else {
+			currentActionTxt += currentActionTxt[i];
+		}
+	}
+
+	currentAction.text = currentActionTxt;
+	actions.push_back(currentAction);
+
+	return actions;
+}
 
 void ReadFile::AddLigne(string ligneToAdd) {
 	lignes.push_back(ligneToAdd);

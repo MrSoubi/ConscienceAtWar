@@ -11,8 +11,11 @@ public:
 
 	static void SetScene(string currentTxt);
 
-	static string FindSceneText(int posInContent, string content);
-	static int GetNumber(int posInContent, string content);
+	static vector<string> TidyUpScene(string currentTxt);
+
+	static vector<Paragraph> SetParagraph(string currentTxt);
+	static vector<Condition> ReadCondition(string currenttxt);
+	static vector<Action> ReadAction(string currenttxt);
 
 	static void AddLigne(string ligneToAdd);
 };
