@@ -1,6 +1,12 @@
+#pragma once
+#include <string>
+#include <iostream>
+#include <vector>
+
 #include "Choice.h"
 
-Choice::Choice(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet, string link) {
+
+Choice::Choice(std::string text, std::vector<Condition> conditions, std::vector<Action> actions, int timeOffSet, std::string link) {
 	this->text = text;
 	this->conditions = conditions;
 	this->actions = actions;
@@ -9,5 +15,5 @@ Choice::Choice(string text, vector<Condition> conditions, vector<Action> actions
 }
 
 void Choice::Display() {
-	cout << text << endl;
+	std::cout << text << std::endl;
 }

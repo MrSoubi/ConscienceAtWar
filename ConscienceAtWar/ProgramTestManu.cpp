@@ -1,16 +1,19 @@
-#include "SceneCreatorTEST.h"
+#pragma once
 
-int SceneCreatorTEST::karma = 0;
-vector<Condition> SceneCreatorTEST::inventory = vector<Condition>{};
+#include <string>
+#include <vector>
+
+#include "ProgramTestManu.h"
+
+int ProgramTestManu::karma = 0;
+std::vector<std::string> ProgramTestManu::inventory = std::vector<std::string>{};
 
 int main(){
-
-
 	//Actions / Conditions TEST
 
-	vector<Scene> allScenes;
-	vector<Action> actions;
-	vector<Condition> conditions;
+	std::vector<Scene> allScenes;
+	std::vector<Action> actions;
+	std::vector<Condition> conditions;
 
 
 	Action act_SniperAlive = Action("SniperAlive");
@@ -27,8 +30,8 @@ int main(){
 
 	//Scene TEST
 
-	vector<Paragraph> scene1paragraphs; // Paragraph scene 1
-	vector<Choice> scene1choices; // choices scene 1
+	std::vector<Paragraph> scene1paragraphs; // Paragraph scene 1
+	std::vector<Choice> scene1choices; // choices scene 1
 
 	Scene scene1 = Scene("Scene1", scene1paragraphs, scene1choices, 15);
 

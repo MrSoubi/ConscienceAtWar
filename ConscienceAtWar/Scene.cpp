@@ -1,27 +1,34 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <iostream>
+
 #include "Scene.h"
-Scene::Scene(string name, vector<Paragraph> paragraphs, vector<Choice> choices, int timer) {
+
+Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Choice> choices, int timer) {
 	this->name = name;
 	this->paragraphs = paragraphs;
 	this->choices = choices;
 	this->timer = timer;
 }
 
-void Scene::Display(vector<Scene> scene) {
-	cout << this->name << endl << endl;
+void Scene::Display(std::vector<Scene> scene) {
+	std::cout << this->name << std::endl << std::endl;
 
 	for (Paragraph paragraph : paragraphs) {
 		paragraph.Display(20);
 	}
 
-	cout << endl;
-	cout << "-------------------------------------------------------------" << endl;
-	cout << endl;
+	std::cout << std::endl;
+	std::cout << "-------------------------------------------------------------" << std::endl;
+	std::cout << std::endl;
 
 	for (Choice choice : choices) {
 		choice.Display();
 	}
 	int playerChoice;
-	cin >> playerChoice; // temp
+	std::cin >> playerChoice; // temp
 	for (int n = 0; n < choices.size(); n++)
 	{
 		if (playerChoice == n+1) {

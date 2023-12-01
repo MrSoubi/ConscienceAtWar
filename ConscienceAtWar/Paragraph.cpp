@@ -1,7 +1,16 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <chrono>
+#include <thread>
+#include <iostream>
+
 #include "Paragraph.h"
 #include "utils.h"
 
-Paragraph::Paragraph(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet) {
+
+Paragraph::Paragraph(std::string text, std::vector<Condition> conditions, std::vector<Action> actions, int timeOffSet) {
 	this->text = text;
 	this->conditions = conditions;
 	this->actions = actions;
@@ -10,13 +19,13 @@ Paragraph::Paragraph(string text, vector<Condition> conditions, vector<Action> a
 
 void Paragraph::Display(int delay) {
 	for (int i = 0; i < text.length(); i++) {
-		cout << text[i];
+		std::cout << text[i];
 		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 	}
-	cout << endl << endl;
+	std::cout << std::endl << std::endl;
 }
 
-void Paragraph::ApplyAction()
+void Paragraph::ApplyAction() // WARNING ! ALREADY DECLARED IN ACTION
 {
 	for (int i = 0; i < actions.size(); i++) {
 		if (actions[i].IsAdditive() && utils::IsInInventory(actions[i].Text())) {
@@ -26,7 +35,7 @@ void Paragraph::ApplyAction()
 
 		}
 		else {
-			cout << "Problem with ApplyAction().";
+			std::cout << "Problem with ApplyAction().";
 		}
 	}
 }

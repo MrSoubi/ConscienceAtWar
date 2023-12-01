@@ -1,16 +1,20 @@
+#pragma once
+
+#include <vector>
+
 #include "Condition.h"
 #include "Action.h"
 
 class Choice
 {
 public:
-	string text;
-	vector<Condition> conditions;
-	vector<Action> actions;
+	std::string text;
+	std::vector<Condition> conditions;
+	std::vector<Action> actions;
 	int timeOffSet;
-	string link;
+	std::string link;
 
-	Choice(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet, string link);
+	Choice(std::string text, std::vector<Condition> conditions, std::vector<Action> actions, int timeOffSet, std::string link);
 
 	void Display();
 };

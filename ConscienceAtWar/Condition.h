@@ -1,16 +1,16 @@
 #pragma once
-#include "GlobalHeader.h"
-#include "utils.h"
+
+#include <string>
 
 class Condition
 {
 public:
-	string name;
+	std::string name;
 
-	Condition(string name);
+	Condition(std::string name);
 
 	bool IsInInventory();
 	bool IsVerified();
 	bool IsNegative();
-	string Text();
+	std::string Text();
 };

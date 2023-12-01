@@ -1,18 +1,23 @@
-#include "Condition.h"
-#include "SceneCreatorTEST.h"
+#pragma once
 
-Condition::Condition(string name)
+#include <string>
+#include <vector>
+
+#include "Condition.h"
+#include "ProgramTestManu.h"
+#include "utils.h"
+
+Condition::Condition(std::string name)
 {
 	this->name = name;
 }
 
-// Gotta use another function in utils, to check for the existance of a string in the inventory, and then check the condition.
-bool Condition::IsInInventory() // WIP, check to be made on the first character (!)
+bool Condition::IsInInventory()
 {
 	bool result = false;
 
-	for (int i = 0; i < SceneCreatorTEST::inventory.size(); i++) {
-		result = result || SceneCreatorTEST::inventory[i].name == name;
+	for (int i = 0; i < ProgramTestManu::inventory.size(); i++) {
+		result = result || ProgramTestManu::inventory[i] == Text();
 	}
 
 	return result;
@@ -43,10 +48,10 @@ bool Condition::IsNegative()
 	return name[0] == '!';
 }
 
-string Condition::Text()
+std::string Condition::Text()
 {
 	if (IsNegative()) {
-		string textPart;
+		std::string textPart;
 
 		for (int i = 1; i < name.size(); i++) {
 			textPart.push_back(name[i]);

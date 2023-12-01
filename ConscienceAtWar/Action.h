@@ -1,13 +1,18 @@
-#include "GlobalHeader.h"
+#pragma once
+
+#include <string>
 
 class Action
 {
 public:
-	string text;
+	std::string text;
 
-	Action(string text);
+	Action(std::string text);
 	
 	bool IsAdditive();
 	bool IsSubtractive();
-	string Text();
+	std::string Text();
+	bool IsKarmaAction();
+	int GetKarmaValue();
+	void Activate();
 };
