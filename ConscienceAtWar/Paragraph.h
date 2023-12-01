@@ -3,10 +3,10 @@
 class Paragraph
 {
 public:
-	string text;
+	int timeOffSet;
 	vector<Condition> conditions;
 	vector<Action> actions;
-	int timeOffSet;
+	string text;
 
 	Paragraph(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet);
 	void Display();
