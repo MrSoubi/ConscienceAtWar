@@ -5,6 +5,13 @@
 
 #include <string>
 #include <vector>
+
+#include <chrono>
+#include <future>
+#include <iomanip>
+#include <limits>
+#include <conio.h>
+
 #include <fstream>
 #include<chrono> 
 #include<thread>

@@ -22,4 +22,7 @@ public:
 	void ApplyAction();
 
 	bool CanBeDisplayed();
+	
+	Paragraph(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet);
+	void Display(int speed);
 };

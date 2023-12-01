@@ -1,12 +1,6 @@
-#pragma once
-#include <string>
-#include <iostream>
-#include <vector>
-
 #include "Choice.h"
 
-
-Choice::Choice(std::string text, std::vector<Condition> conditions, std::vector<Action> actions, int timeOffSet, std::string link) {
+Choice::Choice(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet, string link) {
 	this->text = text;
 	this->conditions = conditions;
 	this->actions = actions;
@@ -14,6 +8,15 @@ Choice::Choice(std::string text, std::vector<Condition> conditions, std::vector<
 	this->link = link;
 }
 
-void Choice::Display() {
-	std::cout << text << std::endl;
+void Choice::Display(int speed) {
+	if (speed > 0) {
+		for (char c : text) {
+			cout << c << flush;
+			this_thread::sleep_for(chrono::milliseconds(speed));
+		}
+		cout << endl;
+	}
+	else {
+		cout << text << endl;
+	}
 }
