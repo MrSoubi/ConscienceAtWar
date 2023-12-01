@@ -1,5 +1,17 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <conio.h>
+#include <ctype.h>
+#include <future>
+#include <iomanip>
+
 #include "Scene.h"
-Scene::Scene(string name, vector<Paragraph> paragraphs, vector<Choice> choices, int timer) {
+Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Choice> choices, int timer) {
 	this->name = name;
 	this->paragraphs = paragraphs;
 	this->choices = choices;
@@ -10,53 +22,53 @@ void getUserChoice(int& playerChoice) {
     playerChoice = _getch() - '0';
 }
 
-void Scene::Display(vector<Scene> scene) {
+void Scene::Display(std::vector<Scene> scene) {
     bool updatedScene = false;
     int newChoiceIndex = -1;
 
     system("cls");
-    cout << this->name << endl << endl;
+    std::cout << this->name << std::endl << std::endl;
 
     for (Paragraph paragraph : paragraphs) {
         paragraph.Display(50);
     }
 
-    cout << endl;
+    std::cout << std::endl;
 
     for (int i = 0; i < choices.size(); i++) {
         if (choices[i].timeOffSet != 0) {
             newChoiceIndex = i;
         }
         else {
-            cout << i + 1 << ". "; choices[i].Display(50);
+            std::cout << i + 1 << ". "; choices[i].Display(50);
         }
     }
 
-    cout << endl;
+    std::cout << std::endl;
  
     int playerChoice = -1;
-    auto future = async(getUserChoice, ref(playerChoice));
+    auto future = std::async(getUserChoice, std::ref(playerChoice));
 
-    auto start_time = chrono::steady_clock::now();
+    auto start_time = std::chrono::steady_clock::now();
 
-    while (chrono::steady_clock::now() - start_time < chrono::milliseconds(timer * 1000)
-        && future.wait_for(chrono::milliseconds(0)) != future_status::ready)
+    while (std::chrono::steady_clock::now() - start_time < std::chrono::milliseconds(timer * 1000)
+        && future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready)
     {
-        for (int i = timer * 1000; i >= 0 && future.wait_for(chrono::milliseconds(0)) != future_status::ready; i -= 20) {
+        for (int i = timer * 1000; i >= 0 && future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready; i -= 20) {
             if (newChoiceIndex >= 0) {
-                if (chrono::steady_clock::now() - start_time >= chrono::seconds(choices[newChoiceIndex].timeOffSet) && !updatedScene) {        
+                if (std::chrono::steady_clock::now() - start_time >= std::chrono::seconds(choices[newChoiceIndex].timeOffSet) && !updatedScene) {
                     system("cls");
-                    cout << this->name << endl << endl;
+                    std::cout << this->name << std::endl << std::endl;
                     for (Paragraph paragraph : paragraphs) {
                         paragraph.Display(0);
                     }
 
-                    cout << endl;
+                    std::cout << std::endl;
 
                     for (int i = 0; i < choices.size(); i++) {
-                        cout << i + 1 << ". "; choices[i].Display(0);
+                        std::cout << i + 1 << ". "; choices[i].Display(0);
                     }
-                    cout << endl;
+                    std::cout << std::endl;
                     updatedScene = true;
                 }
             } 
@@ -65,7 +77,7 @@ void Scene::Display(vector<Scene> scene) {
         }
     }
 
-    if (future.wait_for(chrono::milliseconds(0)) == future_status::ready) {
+    if (future.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
         future.get();
         for (int n = 0; n < choices.size(); n++) {
             if (playerChoice == n + 1) {

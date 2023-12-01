@@ -17,14 +17,6 @@ Paragraph::Paragraph(std::string text, std::vector<Condition> conditions, std::v
 	this->timeOffSet = timeOffSet;
 }
 
-void Paragraph::Display(int delay) {
-	for (int i = 0; i < text.length(); i++) {
-		std::cout << text[i];
-		std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-	}
-	std::cout << std::endl << std::endl;
-}
-
 void Paragraph::ApplyAction() // WARNING ! ALREADY DECLARED IN ACTION
 {
 	for (int i = 0; i < actions.size(); i++) {
@@ -53,12 +45,12 @@ bool Paragraph::CanBeDisplayed()
 void Paragraph::Display(int speed) {
 	if (speed > 0) {
 		for (char c : text) {
-			cout << c << flush;
-			this_thread::sleep_for(chrono::milliseconds(speed));
+			std::cout << c << std::flush;
+			std::this_thread::sleep_for(std::chrono::milliseconds(speed));
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 	else {
-		cout << text << endl;
+		std::cout << text << std::endl;
 	}
 }
