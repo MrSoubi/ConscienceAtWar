@@ -12,5 +12,5 @@ public:
 
 	Choice(string text, vector<Condition> conditions, vector<Action> actions, int timeOffSet, string link);
 
-	void Display();
+	void Display(int speed);
 };
