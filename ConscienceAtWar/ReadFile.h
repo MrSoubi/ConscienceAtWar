@@ -13,7 +13,8 @@ public:
 
 	static vector<string> TidyUpScene(string currentTxt);
 
-	static vector<Paragraph> SetParagraph(string currentTxt);
+	static vector<Paragraph> SetParagraphs(string currentTxt);
+	static Paragraph ReadParagraph(string currentTxt);
 
 	static vector<Choice> SetChoices(vector<string> currentTxt);
 

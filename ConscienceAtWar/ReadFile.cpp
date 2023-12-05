@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "ReadFile.h"
 
 vector<string> lignes;
@@ -35,7 +36,7 @@ void ReadFile::SetScene(string currentTxt) {
 	vector<string> choicesTxt;
 	
 	string sceneName;
-	int sceneTimer;
+	float sceneTimer = 0;
 	vector<Paragraph> sceneParagraph;
 	vector<Choice> choices;
 
@@ -49,7 +50,7 @@ void ReadFile::SetScene(string currentTxt) {
 			sceneTimer = stof(currentSceneContent[i]);
 			break;
 		case 2:
-			sceneParagraph = ReadFile::SetParagraph(currentSceneContent[i]);
+			sceneParagraph = ReadFile::SetParagraphs(currentSceneContent[i]);
 			break;
 		default:
 			choicesTxt.push_back(currentSceneContent[i]);
@@ -57,21 +58,51 @@ void ReadFile::SetScene(string currentTxt) {
 		}
 	}
 
+	choices = ReadFile::SetChoices(choicesTxt);
+
+	cout << "Scene infos" << endl;
+	cout << sceneName << endl
+		<< sceneTimer << endl << endl;
+
+	cout << "Scene Paragraph" << endl;
+
 	for (int i = 0; i < sceneParagraph.size(); i++)
 	{
-		cout << endl << sceneParagraph[i].timeOffSet << endl << sceneParagraph[i].text << endl;
+		cout << sceneParagraph[i].text << endl << sceneParagraph[i].timeOffSet << endl;
 
-		for (int y = 0; y < sceneParagraph[i].conditions.size(); y++)
+		cout << "paragraph condition" << endl;
+
+		for (int j = 0; j < sceneParagraph[i].conditions.size(); j++)
 		{
-			cout << sceneParagraph[i].conditions[y].name << endl;
+			cout << sceneParagraph[i].conditions[j].name << endl;
 		}
-		for (int y = 0; y < sceneParagraph[i].actions.size(); y++)
+		cout << "paragraph actions" << endl;
+
+		for (int j = 0; j < sceneParagraph[i].actions.size(); j++)
 		{
-			cout << sceneParagraph[i].actions[y].text << endl;
+			cout << sceneParagraph[i].actions[j].text << endl;
 		}
 	}
 
-	choices = ReadFile::SetChoices(choicesTxt);
+	cout << "Scene choices" << endl;
+
+	for (int i = 0; i < choices.size(); i++)
+	{
+		cout << choices[i].text << endl << choices[i].timeOffSet << endl << choices[i].link << endl;
+
+		cout << "choice condition" << endl;
+
+		for (int j = 0; j < choices[i].conditions.size(); j++)
+		{
+			cout << choices[i].conditions[j].name << endl;
+		}
+		cout << "choice action" << endl;
+
+		for (int j = 0; j < choices[i].actions.size(); j++)
+		{
+			cout << choices[i].actions[j].text << endl;
+		}
+	}
 }
 
 vector<string> ReadFile::TidyUpScene(string content) {
@@ -92,81 +123,73 @@ vector<string> ReadFile::TidyUpScene(string content) {
 	return contentInScene;
 }
 
-vector<Paragraph> ReadFile::SetParagraph(string currentTxt) {
+vector<Paragraph> ReadFile::SetParagraphs(string currentTxt) {
 	vector<Paragraph> allParagraph;
+	string currentParagraphTxt;
+	bool paragraphsToRead = true;
 
-	string txtRegister;
+	int indexStart = 0;
+	int indexA = 0;
+	int indexEnd;
+	while (paragraphsToRead) {
 
-	int timeOffSet = 0;
+		// Recherche de l'index venant juste après le 6e ']'
+		for (int i = 3; i > 0; i -= 1) {
+			indexA = currentTxt.find("]]", indexA) + 2;
+		}
+
+		if (currentTxt.find("[[", indexA) != string::npos){
+			indexEnd = currentTxt.find("[[", indexA);
+			currentParagraphTxt = currentTxt.substr(indexStart, indexEnd - indexStart);
+			allParagraph.push_back(ReadFile::ReadParagraph(currentParagraphTxt));
+			indexStart = indexEnd;
+			indexA = indexEnd;
+		}else{
+			indexEnd = currentTxt.length() - 1;
+			currentParagraphTxt = currentTxt.substr(indexStart, indexEnd);
+			allParagraph.push_back(ReadFile::ReadParagraph(currentParagraphTxt));
+			paragraphsToRead = false;
+		}
+	}
+	return allParagraph;
+}
+
+Paragraph ReadFile::ReadParagraph(string currentTxt) {	
+	string text;
 	vector<Condition> conditions;
 	vector<Action> actions;
-	string text;
+	int timeOffSet = 0;
 
-	int indexHelper = 1;
+	string tmpTxt;
 
-	bool isReading = false;
+	int indexStart = 0;
+	int indexEnd;
 
-	for (int i = 2; i < currentTxt.length(); i++)
-	{
-		if (currentTxt[i] == '[' && currentTxt[i + 1] == '[') {
-			if (isReading) {
-				text = txtRegister;
+	for (int i = 3; i > 0; i -= 1) {
+		indexStart = currentTxt.find("[[", indexStart) + 2;
+		indexEnd = currentTxt.find("]]", indexStart);
+		tmpTxt = currentTxt.substr(indexStart, indexEnd - indexStart);
 
-				allParagraph.emplace_back(text, conditions, actions, timeOffSet);
-
-				text = "";
-				conditions.clear();
-				actions.clear();
-				timeOffSet = 0;
-				txtRegister = "";
-			}
-
-			i += 2;
-		}
-		else {
-			txtRegister += currentTxt[i];
-		}
-
-		if (currentTxt[i] == ']' && currentTxt[i + 1] == ']') {
-			if (indexHelper == 1) {
-				if (txtRegister != "") {
-					timeOffSet = stoi(txtRegister);
-					txtRegister = "";
-				}
-			}
-			else if (indexHelper == 2){
-				if (txtRegister != "") {
-					conditions = ReadCondition(txtRegister);
-					txtRegister = "";
-				}
-			}
-			else if (indexHelper == 3) {
-				if (txtRegister != "") {
-					actions = ReadAction(txtRegister);
-					txtRegister = "";
-				}
-				indexHelper = 0;
-				isReading = true;
-			}
-
-			indexHelper += 1;
-			i += 2;
-		}
-		else {
-			txtRegister += currentTxt[i];
+		switch (i)
+		{
+		case 0:
+			timeOffSet = stoi(tmpTxt);
+			break;
+		case 1:
+			conditions = ReadFile::ReadCondition(tmpTxt);
+			break;
+		case 2:
+			actions = ReadFile::ReadAction(tmpTxt);
+			break;
 		}
 	}
 
-	currentTxt.find("");
-	int a;
-	char* b;
-	char* c;
-	int d = sscanf(currentTxt.c_str(), "[[%d]][[%s]][[%s]]", &a, b, c);
+	indexStart = currentTxt.find("]]", indexEnd) + 2;
+	indexEnd = currentTxt.length() - 1;
+	tmpTxt = currentTxt.substr(indexStart, indexEnd - indexStart);
+	text = tmpTxt;
 
-	text = txtRegister;
-	allParagraph.emplace_back(text, conditions, actions, timeOffSet);
-
-	return allParagraph;
+	return *new Paragraph(text, conditions, actions, timeOffSet);
 }
 
 vector<Choice> ReadFile::SetChoices(vector<string> currentTxt) {
