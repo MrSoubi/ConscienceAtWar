@@ -3,13 +3,13 @@
 #include <string>
 
 #include "utils.h"
-#include "ProgramTestManu.h"
+#include "Program.h"
 
 bool utils::IsInInventory(std::string text) {
 	bool result = false;
 
-	for (int i = 0; i < ProgramTestManu::inventory.size(); i++) {
-		result = result || ProgramTestManu::inventory[i] == text;
+	for (int i = 0; i < Program::inventory.size(); i++) {
+		result = result || Program::inventory[i] == text;
 	}
 
 	return result;
@@ -17,8 +17,8 @@ bool utils::IsInInventory(std::string text) {
 
 int utils::GetIndexInInventory(std::string text)
 {
-	for (int i = 0; i < ProgramTestManu::inventory.size(); i++) {
-		if (ProgramTestManu::inventory[i] == text) {
+	for (int i = 0; i < Program::inventory.size(); i++) {
+		if (Program::inventory[i] == text) {
 			return i;
 		}
 	}
@@ -27,12 +27,12 @@ int utils::GetIndexInInventory(std::string text)
 
 void utils::RemoveFromInventory(std::string text)
 {
-	ProgramTestManu::inventory.erase(ProgramTestManu::inventory.begin() + GetIndexInInventory(text));
+	Program::inventory.erase(Program::inventory.begin() + GetIndexInInventory(text));
 }
 
 void utils::AddToInventory(std::string text)
 {
-	ProgramTestManu::inventory.push_back(text);
+	Program::inventory.push_back(text);
 }
 
 int utils::Pow(int n, int p)
