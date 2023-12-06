@@ -1,5 +1,5 @@
 #include "Scene.h"
-Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Choice> choices, int timer) {
+Scene::Scene(string name, vector<Paragraph> paragraphs, vector<Choice> choices, int timer) {
 	this->name = name;
 	this->paragraphs = paragraphs;
 	this->choices = choices;
@@ -14,7 +14,11 @@ void getUserChoice(int& playerChoice) {
     playerChoice = _getch() - '0';
 }
 
-void Scene::Display(std::vector<Scene> scene) {
+void Scene::Display(vector<Scene> scene) {
+    bool inputed = false;
+
+    int writeSpeed = 17;
+
     int timerDisplayPos = 2;
     int paragraphsDisplayPos = timerDisplayPos + 3;
     int choicesDisplayPos = paragraphsDisplayPos + 8;
@@ -22,46 +26,46 @@ void Scene::Display(std::vector<Scene> scene) {
     int inputNumber = 1;
 
     system("cls");
-    std::cout << "Scene : " << name<< std::endl;
+    cout << "Scene : " << name<<endl;
 
     moveToConsoleLine(timerDisplayPos);
 
     std::cout << "\033[2K\r" << std::endl;
-    std::cout << "Temps restant : " << timer << ".00 secondes";
+    cout << "Temps restant : " << timer << ".00 secondes";
 
     moveToConsoleLine(paragraphsDisplayPos);
 
     for (int i = 0; i < paragraphs.size(); i++) {
         if (paragraphs[i].timeOffSet <= 0) {
-            paragraphs[i].Display(10);
+            paragraphs[i].Display(writeSpeed);
             paragraphsDisplayPos++;
         }
     }
 
     moveToConsoleLine(choicesDisplayPos);
 
-    std::cout << "-----------------------------------------"<< std::endl;
+    cout << "-----------------------------------------"<<endl;
     choicesDisplayPos += 2;
 
     moveToConsoleLine(choicesDisplayPos);
 
     for (int i = 0; i < choices.size(); i++) {
         if (choices[i].timeOffSet <= 0) {          
-            std::cout << inputNumber << ". "; choices[i].Display(10);
+            cout << inputNumber << ". "; choices[i].Display(10);
             inputNumber++;
             choicesDisplayPos++;
         }
     }
 
     int playerChoice = -1;
-    auto future = std::async(getUserChoice, std::ref(playerChoice));
+
+    auto future = async(getUserChoice, ref(playerChoice));
 
     auto start_time = std::chrono::steady_clock::now();
     auto end_time = start_time + std::chrono::milliseconds(timer * 1000);
     bool messageDisplayed = false;
 
-    while (std::chrono::steady_clock::now() < end_time && future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready) {
-
+    while ((std::chrono::steady_clock::now() < end_time) && playerChoice == -1) {
         auto current_time = std::chrono::steady_clock::now();
         auto remaining_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - current_time).count() / 1000.0;
 
@@ -71,7 +75,7 @@ void Scene::Display(std::vector<Scene> scene) {
                     paragraphs[i].displayed = true;
                     moveToConsoleLine(paragraphsDisplayPos);
                     paragraphsDisplayPos++;
-                    paragraphs[i].Display(10);
+                    paragraphs[i].Display(writeSpeed);
                 }
             }
         }
@@ -80,7 +84,7 @@ void Scene::Display(std::vector<Scene> scene) {
                 if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() >= choices[i].timeOffSet * 1000) {
                     choices[i].displayed = true;
                     moveToConsoleLine(choicesDisplayPos);
-                    std::cout << inputNumber << ". "; choices[i].Display(10);
+                    cout << inputNumber << ". "; choices[i].Display(writeSpeed);
                     inputNumber++;
                     choicesDisplayPos++;
                 }
@@ -96,9 +100,9 @@ void Scene::Display(std::vector<Scene> scene) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    if (future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) { //Input du joueur
+    if ((future.wait_for(chrono::seconds(0)) == future_status::ready || timer <= 0) && playerChoice < inputNumber) { //Input du joueur
         future.get();
-        for (int n = 0; n < choices.size(); n++) {
+        for (int n = 0; n <= scene.size(); n++) {
             if (playerChoice == n + 1) {
                 for (int i = 0; i < scene.size(); i++) {
                     if (choices[n].link == scene[i].name) {
@@ -109,7 +113,12 @@ void Scene::Display(std::vector<Scene> scene) {
             }
         }
     }
+    else if(playerChoice < inputNumber){
+        if (timer > 0) {
+            scene[2].Display(scene); //Fin du chrono
+        }
+    }
     else {
-        scene[0].Display(scene); //Fin du chrono
+        scene[2].Display(scene); //Mauvais input
     }
 }
