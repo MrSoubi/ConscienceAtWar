@@ -16,15 +16,15 @@ std::vector<Scene> scenes;
 
 int posToContinueInContent;
 
-void ReadFile::Start(std::string tmpTest) {
-	ReadFile::Read(tmpTest);
+std::vector<Scene> ReadFile::Start(int argc, char* argv[]) {
+	ReadFile::Read(argv[1]);
 
-	/*for (int i = 1; i < lignes.size(); i++)
+	for (int i = 0; i < lignes.size(); i++)
 	{
-		ReadFile::SetScene(lignes[i]);
-	}*/
+		scenes.push_back(ReadFile::SetScene(lignes[i]));
+	}
 
-	ReadFile::SetScene(tmpTest);
+	return scenes;
 }
 
 void ReadFile::Read(std::string path) {
@@ -40,7 +40,7 @@ void ReadFile::Read(std::string path) {
 	infile.close();
 }
 
-void ReadFile::SetScene(std::string currentTxt) {
+Scene ReadFile::SetScene(std::string currentTxt) {
 	std::vector<std::string> currentSceneContent = ReadFile::TidyUpScene(currentTxt);
 	std::vector<std::string> choicesTxt;
 	
@@ -66,52 +66,9 @@ void ReadFile::SetScene(std::string currentTxt) {
 			break;
 		}
 	}
-
 	choices = ReadFile::SetChoices(choicesTxt);
 
-	std::cout << "Scene infos" << std::endl;
-	std::cout << sceneName << std::endl
-		<< sceneTimer << std::endl << std::endl;
-
-	std::cout << "Scene Paragraph" << std::endl;
-
-	for (int i = 0; i < sceneParagraph.size(); i++)
-	{
-		std::cout << sceneParagraph[i].text << std::endl << sceneParagraph[i].timeOffSet << std::endl;
-
-		std::cout << "paragraph condition" << std::endl;
-
-		for (int j = 0; j < sceneParagraph[i].conditions.size(); j++)
-		{
-			std::cout << sceneParagraph[i].conditions[j].name << std::endl;
-		}
-		std::cout << "paragraph actions" << std::endl;
-
-		for (int j = 0; j < sceneParagraph[i].actions.size(); j++)
-		{
-			std::cout << sceneParagraph[i].actions[j].text << std::endl;
-		}
-	}
-
-	std::cout << "Scene choices" << std::endl;
-
-	for (int i = 0; i < choices.size(); i++)
-	{
-		std::cout << choices[i].text << std::endl << choices[i].timeOffSet << std::endl << choices[i].link << std::endl;
-
-		std::cout << "choice condition" << std::endl;
-
-		for (int j = 0; j < choices[i].conditions.size(); j++)
-		{
-			std::cout << choices[i].conditions[j].name << std::endl;
-		}
-		std::cout << "choice action" << std::endl;
-
-		for (int j = 0; j < choices[i].actions.size(); j++)
-		{
-			std::cout << choices[i].actions[j].text << std::endl;
-		}
-	}
+	return *new Scene(sceneName, sceneParagraph, choices, sceneTimer);
 }
 
 std::vector<std::string> ReadFile::TidyUpScene(std::string content) {
@@ -185,10 +142,10 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 			timeOffSet = stoi(tmpTxt);
 			break;
 		case 1:
-			conditions = ReadFile::ReadCondition(tmpTxt);
+			actions = ReadFile::ReadAction(tmpTxt);
 			break;
 		case 2:
-			actions = ReadFile::ReadAction(tmpTxt);
+			conditions = ReadFile::ReadCondition(tmpTxt);
 			break;
 		}
 	}
