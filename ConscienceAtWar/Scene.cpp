@@ -87,16 +87,15 @@ void Scene::Display(std::vector<Scene> scene) {
             }
         }
         // Affichage du temps restant
-        moveToConsoleLine(timerDisplayPos);
-        std::cout << "\033[2K\r" << std::endl;       
-        std::cout << "Temps restant : " << std::fixed << std::setprecision(2) << remaining_time << " secondes" << std::flush;
-
-        
-
+        if (timer > 0) {
+            moveToConsoleLine(timerDisplayPos);
+            std::cout << "\033[2K\r" << std::endl;
+            std::cout << "Temps restant : " << std::fixed << std::setprecision(2) << remaining_time << " secondes" << std::flush;
+        }       
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    if (future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) { //Input du joueur
+    if (future.wait_for(std::chrono::seconds(0)) == std::future_status::ready || timer <= 0) { //Input du joueur
         future.get();
         for (int n = 0; n < choices.size(); n++) {
             if (playerChoice == n + 1) {
@@ -110,6 +109,8 @@ void Scene::Display(std::vector<Scene> scene) {
         }
     }
     else {
-        scene[0].Display(scene); //Fin du chrono
+        if (timer > 0) {
+            scene[0].Display(scene); //Fin du chrono
+        }
     }
 }

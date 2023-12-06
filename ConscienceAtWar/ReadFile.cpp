@@ -19,7 +19,7 @@ int posToContinueInContent;
 std::vector<Scene> ReadFile::Start(int argc, char* argv[]) {
 	ReadFile::Read(argv[1]);
 
-	for (int i = 0; i < lignes.size(); i++)
+	for (int i = 1; i < lignes.size(); i++)
 	{
 		scenes.push_back(ReadFile::SetScene(lignes[i]));
 	}
@@ -29,13 +29,11 @@ std::vector<Scene> ReadFile::Start(int argc, char* argv[]) {
 
 void ReadFile::Read(std::string path) {
 	std::string content;
+
 	std::fstream infile;
 	infile.open(path, std::fstream::in);
 
-	while (getline(infile, content))
-	{
-		ReadFile::AddLigne(content);
-	}
+	while (getline(infile, content)) ReadFile::AddLigne(content);
 
 	infile.close();
 }
@@ -56,7 +54,8 @@ Scene ReadFile::SetScene(std::string currentTxt) {
 			sceneName = currentSceneContent[i];
 			break;
 		case 1:
-			sceneTimer = stof(currentSceneContent[i]);
+			if (currentSceneContent[i] == "") sceneTimer = 0;
+			else sceneTimer = stof(currentSceneContent[i]);
 			break;
 		case 2:
 			sceneParagraph = ReadFile::SetParagraphs(currentSceneContent[i]);
@@ -139,7 +138,8 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 		switch (i)
 		{
 		case 0:
-			timeOffSet = stoi(tmpTxt);
+			if (tmpTxt == "") timeOffSet = 0;
+			else timeOffSet = stoi(tmpTxt);
 			break;
 		case 1:
 			actions = ReadFile::ReadAction(tmpTxt);
@@ -173,7 +173,8 @@ std::vector<Choice> ReadFile::SetChoices(std::vector<std::string> currentTxt) {
 	{
 		int tmp = i * 5;
 
-		timeOffset = stoi(currentTxt[tmp]);
+		if (currentTxt[tmp] == "") timeOffset = 0;
+		else timeOffset = stoi(currentTxt[tmp]);
 		text = currentTxt[tmp + 1];
 		conditions = ReadFile::ReadCondition(currentTxt[tmp + 2]);
 		actions = ReadFile::ReadAction(currentTxt[tmp + 3]);
