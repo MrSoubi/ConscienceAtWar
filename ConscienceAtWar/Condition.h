@@ -7,6 +7,7 @@ class Condition
 public:
 	std::string name;
 
+	Condition();
 	Condition(std::string name);
 
 	bool IsInInventory();

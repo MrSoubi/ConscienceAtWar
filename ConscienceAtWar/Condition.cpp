@@ -4,8 +4,13 @@
 #include <vector>
 
 #include "Condition.h"
-#include "ProgramTestManu.h"
+#include "Program.h"
 #include "utils.h"
+
+Condition::Condition()
+{
+	this->name = "Not defined";
+}
 
 Condition::Condition(std::string name)
 {
@@ -16,8 +21,8 @@ bool Condition::IsInInventory()
 {
 	bool result = false;
 
-	for (int i = 0; i < ProgramTestManu::inventory.size(); i++) {
-		result = result || ProgramTestManu::inventory[i] == Text();
+	for (int i = 0; i < Program::inventory.size(); i++) {
+		result = result || Program::inventory[i] == Text();
 	}
 
 	return result;

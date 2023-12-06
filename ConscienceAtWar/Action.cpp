@@ -3,7 +3,12 @@
 #include <string>
 #include "Action.h"
 #include "utils.h"
-#include "ProgramTestManu.h"
+#include "Program.h"
+
+Action::Action()
+{
+	this->text = "Not defined";
+}
 
 Action::Action(std::string text) {
 	this->text = text;
@@ -47,10 +52,10 @@ void Action::Activate()
 {
 	if (IsKarmaAction()) {
 		if (IsAdditive()) {
-			ProgramTestManu::karma += GetKarmaValue();
+			Program::karma += GetKarmaValue();
 		}
 		else {
-			ProgramTestManu::karma -= GetKarmaValue();
+			Program::karma -= GetKarmaValue();
 		}
 	}
 	else if (utils::IsInInventory(Text()) && IsSubtractive()){

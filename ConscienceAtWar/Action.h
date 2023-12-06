@@ -7,6 +7,7 @@ class Action
 public:
 	std::string text;
 
+	Action();
 	Action(std::string text);
 	
 	bool IsAdditive();
