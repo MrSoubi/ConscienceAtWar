@@ -5,6 +5,11 @@
 #include "utils.h"
 #include "ProgramTestManu.h"
 
+Action::Action()
+{
+	this->text = "Not defined";
+}
+
 Action::Action(std::string text) {
 	this->text = text;
 }

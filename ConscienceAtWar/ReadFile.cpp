@@ -1,13 +1,22 @@
 #define _CRT_SECURE_NO_WARNINGS
+
+#include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
+
+#include "Action.h"
+#include "Condition.h"
+
 #include "ReadFile.h"
 
-vector<string> lignes;
+std::vector<std::string> lignes;
 
-vector<Scene> scenes;
+std::vector<Scene> scenes;
 
 int posToContinueInContent;
 
-void ReadFile::Start(string tmpTest) {
+void ReadFile::Start(std::string tmpTest) {
 	ReadFile::Read(tmpTest);
 
 	/*for (int i = 1; i < lignes.size(); i++)
@@ -18,10 +27,10 @@ void ReadFile::Start(string tmpTest) {
 	ReadFile::SetScene(tmpTest);
 }
 
-void ReadFile::Read(string path) {
-	string content;
-	fstream infile;
-	infile.open(path, fstream::in);
+void ReadFile::Read(std::string path) {
+	std::string content;
+	std::fstream infile;
+	infile.open(path, std::fstream::in);
 
 	while (getline(infile, content))
 	{
@@ -31,14 +40,14 @@ void ReadFile::Read(string path) {
 	infile.close();
 }
 
-void ReadFile::SetScene(string currentTxt) {
-	vector<string> currentSceneContent = ReadFile::TidyUpScene(currentTxt);
-	vector<string> choicesTxt;
+void ReadFile::SetScene(std::string currentTxt) {
+	std::vector<std::string> currentSceneContent = ReadFile::TidyUpScene(currentTxt);
+	std::vector<std::string> choicesTxt;
 	
-	string sceneName;
+	std::string sceneName;
 	float sceneTimer = 0;
-	vector<Paragraph> sceneParagraph;
-	vector<Choice> choices;
+	std::vector<Paragraph> sceneParagraph;
+	std::vector<Choice> choices;
 
 	for (int i = 0; i < currentSceneContent.size(); i++)
 	{
@@ -60,54 +69,54 @@ void ReadFile::SetScene(string currentTxt) {
 
 	choices = ReadFile::SetChoices(choicesTxt);
 
-	cout << "Scene infos" << endl;
-	cout << sceneName << endl
-		<< sceneTimer << endl << endl;
+	std::cout << "Scene infos" << std::endl;
+	std::cout << sceneName << std::endl
+		<< sceneTimer << std::endl << std::endl;
 
-	cout << "Scene Paragraph" << endl;
+	std::cout << "Scene Paragraph" << std::endl;
 
 	for (int i = 0; i < sceneParagraph.size(); i++)
 	{
-		cout << sceneParagraph[i].text << endl << sceneParagraph[i].timeOffSet << endl;
+		std::cout << sceneParagraph[i].text << std::endl << sceneParagraph[i].timeOffSet << std::endl;
 
-		cout << "paragraph condition" << endl;
+		std::cout << "paragraph condition" << std::endl;
 
 		for (int j = 0; j < sceneParagraph[i].conditions.size(); j++)
 		{
-			cout << sceneParagraph[i].conditions[j].name << endl;
+			std::cout << sceneParagraph[i].conditions[j].name << std::endl;
 		}
-		cout << "paragraph actions" << endl;
+		std::cout << "paragraph actions" << std::endl;
 
 		for (int j = 0; j < sceneParagraph[i].actions.size(); j++)
 		{
-			cout << sceneParagraph[i].actions[j].text << endl;
+			std::cout << sceneParagraph[i].actions[j].text << std::endl;
 		}
 	}
 
-	cout << "Scene choices" << endl;
+	std::cout << "Scene choices" << std::endl;
 
 	for (int i = 0; i < choices.size(); i++)
 	{
-		cout << choices[i].text << endl << choices[i].timeOffSet << endl << choices[i].link << endl;
+		std::cout << choices[i].text << std::endl << choices[i].timeOffSet << std::endl << choices[i].link << std::endl;
 
-		cout << "choice condition" << endl;
+		std::cout << "choice condition" << std::endl;
 
 		for (int j = 0; j < choices[i].conditions.size(); j++)
 		{
-			cout << choices[i].conditions[j].name << endl;
+			std::cout << choices[i].conditions[j].name << std::endl;
 		}
-		cout << "choice action" << endl;
+		std::cout << "choice action" << std::endl;
 
 		for (int j = 0; j < choices[i].actions.size(); j++)
 		{
-			cout << choices[i].actions[j].text << endl;
+			std::cout << choices[i].actions[j].text << std::endl;
 		}
 	}
 }
 
-vector<string> ReadFile::TidyUpScene(string content) {
-	vector<string> contentInScene;
-	string currentContent;
+std::vector<std::string> ReadFile::TidyUpScene(std::string content) {
+	std::vector<std::string> contentInScene;
+	std::string currentContent;
 
 	for (int i = 0; i < content.length(); i++)
 	{
@@ -123,9 +132,9 @@ vector<string> ReadFile::TidyUpScene(string content) {
 	return contentInScene;
 }
 
-vector<Paragraph> ReadFile::SetParagraphs(string currentTxt) {
-	vector<Paragraph> allParagraph;
-	string currentParagraphTxt;
+std::vector<Paragraph> ReadFile::SetParagraphs(std::string currentTxt) {
+	std::vector<Paragraph> allParagraph;
+	std::string currentParagraphTxt;
 	bool paragraphsToRead = true;
 
 	int indexStart = 0;
@@ -138,7 +147,7 @@ vector<Paragraph> ReadFile::SetParagraphs(string currentTxt) {
 			indexA = currentTxt.find("]]", indexA) + 2;
 		}
 
-		if (currentTxt.find("[[", indexA) != string::npos){
+		if (currentTxt.find("[[", indexA) != std::string::npos){
 			indexEnd = currentTxt.find("[[", indexA);
 			currentParagraphTxt = currentTxt.substr(indexStart, indexEnd - indexStart);
 			allParagraph.push_back(ReadFile::ReadParagraph(currentParagraphTxt));
@@ -154,13 +163,13 @@ vector<Paragraph> ReadFile::SetParagraphs(string currentTxt) {
 	return allParagraph;
 }
 
-Paragraph ReadFile::ReadParagraph(string currentTxt) {	
-	string text;
-	vector<Condition> conditions;
-	vector<Action> actions;
+Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
+	std::string text;
+	std::vector<Condition> conditions;
+	std::vector<Action> actions;
 	int timeOffSet = 0;
 
-	string tmpTxt;
+	std::string tmpTxt;
 
 	int indexStart = 0;
 	int indexEnd;
@@ -192,16 +201,16 @@ Paragraph ReadFile::ReadParagraph(string currentTxt) {
 	return *new Paragraph(text, conditions, actions, timeOffSet);
 }
 
-vector<Choice> ReadFile::SetChoices(vector<string> currentTxt) {
-	vector<Choice> choices;
+std::vector<Choice> ReadFile::SetChoices(std::vector<std::string> currentTxt) {
+	std::vector<Choice> choices;
 	
 	int choicesCount = (int)currentTxt.size() / 5;
 
 	int timeOffset;
-	string text;
-	vector<Condition> conditions;
-	vector<Action> actions;
-	string link;
+	std::string text;
+	std::vector<Condition> conditions;
+	std::vector<Action> actions;
+	std::string link;
 
 	for (int i = 0; i < choicesCount; i++)
 	{
@@ -219,10 +228,10 @@ vector<Choice> ReadFile::SetChoices(vector<string> currentTxt) {
 	return choices;
 }
 
-vector<Condition> ReadFile::ReadCondition(string currenttxt) {
-	vector<Condition> conditions;
+std::vector<Condition> ReadFile::ReadCondition(std::string currenttxt) {
+	std::vector<Condition> conditions;
 	Condition currentCondition;
-	string currentContent;
+	std::string currentContent;
 
 	for (int i = 0; i < currenttxt.length(); i++)
 	{
@@ -242,10 +251,10 @@ vector<Condition> ReadFile::ReadCondition(string currenttxt) {
 
 	return conditions;
 }
-vector<Action> ReadFile::ReadAction(string currenttxt) {
-	vector<Action> actions;
+std::vector<Action> ReadFile::ReadAction(std::string currenttxt) {
+	std::vector<Action> actions;
 	Action currentAction;
-	string currentContent;
+	std::string currentContent;
 
 	for (int i = 0; i < currenttxt.length(); i++)
 	{
@@ -265,6 +274,6 @@ vector<Action> ReadFile::ReadAction(string currenttxt) {
 	return actions;
 }
 
-void ReadFile::AddLigne(string ligneToAdd) {
+void ReadFile::AddLigne(std::string ligneToAdd) {
 	lignes.push_back(ligneToAdd);
 }

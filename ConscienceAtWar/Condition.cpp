@@ -7,6 +7,11 @@
 #include "ProgramTestManu.h"
 #include "utils.h"
 
+Condition::Condition()
+{
+	this->name = "Not defined";
+}
+
 Condition::Condition(std::string name)
 {
 	this->name = name;
