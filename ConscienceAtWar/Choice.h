@@ -11,6 +11,7 @@ public:
 	std::string text;
 	std::vector<Condition> conditions;
 	std::vector<Action> actions;
+	bool displayed = false;
 	int timeOffSet;
 	std::string link;
 

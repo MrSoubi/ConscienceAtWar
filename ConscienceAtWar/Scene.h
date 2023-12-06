@@ -1,9 +1,15 @@
 #pragma once
 
+#include <iostream>
 #include <string>
-#include <vector>
+
+#include <chrono>
+#include <future>
+#include <iomanip>
+#include <conio.h>
 
 #include "Paragraph.h"
+#include "Choice.h"
 
 class Scene
 {
