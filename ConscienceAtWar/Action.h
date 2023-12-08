@@ -5,6 +5,14 @@
 class Action
 {
 public:
+	void Activate();
+
+
+
+
+
+
+
 	std::string text;
 
 	Action();
@@ -15,5 +23,5 @@ public:
 	std::string Text();
 	bool IsKarmaAction();
 	int GetKarmaValue();
-	void Activate();
+
 };

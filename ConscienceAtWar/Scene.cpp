@@ -6,12 +6,26 @@ Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Ch
 	this->timer = timer;
 }
 
-void moveToConsoleLine(int line) {
+void MoveToConsoleLine(int line) {
     std::cout << "\033[" << line << ";0H";
 }
 
-void getUserChoice(int& playerChoice) {
+void GetUserChoice(int& playerChoice) {
     playerChoice = _getch() - '0';
+}
+
+bool ConditionVerification(std::vector<Condition> conditions) {
+    for (int i = 0; i < conditions.size(); i++)
+    {
+        if (!conditions[i].IsVerified()) return false;
+    }
+    return true;
+}
+void ActivateActions(std::vector<Action> actions) {
+    for (int i = 0; i < actions.size(); i++)
+    {
+        actions[i].Activate();
+    }
 }
 
 void Scene::Display(std::vector<Scene> scene) {
@@ -24,12 +38,12 @@ void Scene::Display(std::vector<Scene> scene) {
     system("cls");
     std::cout << "Scene : " << name<< std::endl;
 
-    moveToConsoleLine(timerDisplayPos);
+    MoveToConsoleLine(timerDisplayPos);
 
     std::cout << "\033[2K\r" << std::endl;
     std::cout << "Temps restant : " << timer << ".00 secondes";
 
-    moveToConsoleLine(paragraphsDisplayPos);
+    MoveToConsoleLine(paragraphsDisplayPos);
 
     for (int i = 0; i < paragraphs.size(); i++) {
         if (paragraphs[i].timeOffSet <= 0) {
@@ -38,12 +52,12 @@ void Scene::Display(std::vector<Scene> scene) {
         }
     }
 
-    moveToConsoleLine(choicesDisplayPos);
+    MoveToConsoleLine(choicesDisplayPos);
 
     std::cout << "-----------------------------------------"<< std::endl;
     choicesDisplayPos += 2;
 
-    moveToConsoleLine(choicesDisplayPos);
+    MoveToConsoleLine(choicesDisplayPos);
 
     for (int i = 0; i < choices.size(); i++) {
         if (choices[i].timeOffSet <= 0) {          
@@ -54,7 +68,7 @@ void Scene::Display(std::vector<Scene> scene) {
     }
 
     int playerChoice = -1;
-    auto future = std::async(getUserChoice, std::ref(playerChoice));
+    auto future = std::async(GetUserChoice, std::ref(playerChoice));
 
     auto start_time = std::chrono::steady_clock::now();
     auto end_time = start_time + std::chrono::milliseconds(timer * 1000);
@@ -66,20 +80,21 @@ void Scene::Display(std::vector<Scene> scene) {
         auto remaining_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - current_time).count() / 1000.0;
 
         for (int i = 0; i < paragraphs.size(); i++) {
-            if (paragraphs[i].displayed == false && paragraphs[i].timeOffSet > 0) {
+            if (paragraphs[i].displayed == false && paragraphs[i].timeOffSet > 0 && ConditionVerification(paragraphs[i].conditions)) {
                 if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() >= paragraphs[i].timeOffSet * 1000) {
                     paragraphs[i].displayed = true;
-                    moveToConsoleLine(paragraphsDisplayPos);
+                    MoveToConsoleLine(paragraphsDisplayPos);
                     paragraphsDisplayPos++;
                     paragraphs[i].Display(10);
+                    if(paragraphs[i].actions.size() > 0) ActivateActions(paragraphs[i].actions);
                 }
             }
         }
         for (int i = 0; i < choices.size(); i++) {
-            if (choices[i].displayed == false && choices[i].timeOffSet > 0) {
+            if (choices[i].displayed == false && choices[i].timeOffSet > 0 && ConditionVerification(choices[i].conditions)) {
                 if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() >= choices[i].timeOffSet * 1000) {
                     choices[i].displayed = true;
-                    moveToConsoleLine(choicesDisplayPos);
+                    MoveToConsoleLine(choicesDisplayPos);
                     std::cout << inputNumber << ". "; choices[i].Display(10);
                     inputNumber++;
                     choicesDisplayPos++;
@@ -88,7 +103,7 @@ void Scene::Display(std::vector<Scene> scene) {
         }
         // Affichage du temps restant
         if (timer > 0) {
-            moveToConsoleLine(timerDisplayPos);
+            MoveToConsoleLine(timerDisplayPos);
             std::cout << "\033[2K\r" << std::endl;
             std::cout << "Temps restant : " << std::fixed << std::setprecision(2) << remaining_time << " secondes" << std::flush;
         }       
@@ -101,6 +116,7 @@ void Scene::Display(std::vector<Scene> scene) {
             if (playerChoice == n + 1) {
                 for (int i = 0; i < scene.size(); i++) {
                     if (choices[n].link == scene[i].name) {
+                        if (choices[n].actions.size() > 0) ActivateActions(choices[n].actions);
                         system("cls");
                         scene[i].Display(scene);
                     }
