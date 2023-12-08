@@ -8,11 +8,11 @@
 class ReadFile
 {
 public:
-	static void Start(std::string tmpTest);
+	static std::vector<Scene> Start(int argc, char* argv[]);
 
 	static void Read(std::string path);
 
-	static void SetScene(std::string currentTxt);
+	static Scene SetScene(std::string currentTxt);
 
 	static std::vector<std::string> TidyUpScene(std::string currentTxt);
 
