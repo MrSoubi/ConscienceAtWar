@@ -21,7 +21,8 @@ std::vector<Scene> ReadFile::Start(int argc, char* argv[]) {
 
 	for (int i = 1; i < lignes.size(); i++)
 	{
-		scenes.push_back(ReadFile::SetScene(lignes[i]));
+		std::string currentSceneTxt = lignes[i];
+		if(currentSceneTxt.length() > 50) scenes.push_back(ReadFile::SetScene(currentSceneTxt));
 	}
 
 	return scenes;
