@@ -41,7 +41,7 @@ std::string Action::Text()
 // Returns true if the text contains the word "karma"
 bool Action::IsKarmaAction()
 {
-	if (text.find("karma") > 0) {
+	if (text.find("karma") != std::string::npos) {
 		return true;
 	}
 	return false;
@@ -63,7 +63,11 @@ void Action::Activate()
 			Program::karma -= GetKarmaValue();
 		}
 	}
-	else if (utils::IsInInventory(Text()) && IsSubtractive()){
+	else if (utils::IsInInventory(Text()) && IsSubtractive()) {
+		utils::RemoveFromInventory(Text());
+	}
+	else if (!utils::IsInInventory(Text()) && IsAdditive()){
+		utils::AddToInventory(Text());
 	}
 }
 

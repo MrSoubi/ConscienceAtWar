@@ -30,7 +30,7 @@ bool Condition::IsInInventory()
 
 bool Condition::IsKarmaCondition()
 {
-	if (name.find("karma") >= 0) {
+	if (name.find("karma") != std::string::npos) {
 		return true;
 	}
 	return false;
