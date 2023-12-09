@@ -1,12 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include <string>
-
-#include <chrono>
-#include <future>
-#include <iomanip>
-#include <conio.h>
+#include <vector>
 
 #include "Paragraph.h"
 #include "Choice.h"
