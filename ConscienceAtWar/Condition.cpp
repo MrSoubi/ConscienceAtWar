@@ -28,24 +28,36 @@ bool Condition::IsInInventory()
 	return result;
 }
 
-// Doesn't check if the condition is a karma condition !
+bool Condition::IsKarmaCondition()
+{
+	if (name.find("karma") >= 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Condition::IsSuperiorKarma() {
+	return name[0] != '!';
+}
+
+int Condition::GetKarmaValue()
+{
+	if (IsSuperiorKarma()) {
+		std::string d = Text().substr(5);
+		return std::stoi(Text().substr(5));
+	}
+	else return std::stoi(Text().substr(6));
+}
+
 bool Condition::IsVerified()
 {
-	if (IsNegative()) {
-		if (utils::IsInInventory(Text())) {
-			return false;
-		}
-		else {
-			return true;
-		}
+	if (IsKarmaCondition()) {
+		if (IsSuperiorKarma()) return Program::karma >= GetKarmaValue();
+		else return Program::karma <= GetKarmaValue();
 	}
 	else {
-		if (utils::IsInInventory(Text())) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		if (IsNegative()) return !utils::IsInInventory(Text());
+		else return utils::IsInInventory(Text());
 	}
 }
 

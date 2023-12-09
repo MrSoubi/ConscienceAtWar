@@ -18,7 +18,9 @@ public:
 	Condition(std::string name);
 
 	bool IsInInventory();
-
+	bool IsKarmaCondition();
+	bool IsSuperiorKarma();
+	int GetKarmaValue();
 	bool IsNegative();
 	std::string Text();
 };

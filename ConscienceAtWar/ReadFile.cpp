@@ -181,7 +181,7 @@ std::vector<Choice> ReadFile::SetChoices(std::vector<std::string> currentTxt) {
 		actions = ReadFile::ReadAction(currentTxt[tmp + 3]);
 		link = currentTxt[tmp + 4];
 
-		choices.emplace_back(text, conditions, actions, timeOffset, link);
+		if (text != "")	choices.emplace_back(text, conditions, actions, timeOffset, link);
 	}
 
 	return choices;
@@ -205,7 +205,7 @@ std::vector<Condition> ReadFile::ReadCondition(std::string currenttxt) {
 	}
 
 	currentCondition.name = currentContent;
-	conditions.push_back(currentCondition);
+	if (currentCondition.name != "") conditions.push_back(currentCondition); // Do not push back an empty condition
 	currentContent = "";
 
 	return conditions;
@@ -227,7 +227,7 @@ std::vector<Action> ReadFile::ReadAction(std::string currenttxt) {
 		}
 	}
 	currentAction.text = currentContent;
-	actions.push_back(currentAction);
+	if (currentAction.text != "") actions.push_back(currentAction); // Do not push back an empty action
 	currentContent = "";
 
 	return actions;

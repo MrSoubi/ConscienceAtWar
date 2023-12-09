@@ -23,5 +23,4 @@ public:
 	std::string Text();
 	bool IsKarmaAction();
 	int GetKarmaValue();
-
 };

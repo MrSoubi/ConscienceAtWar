@@ -30,11 +30,16 @@ void GetUserChoice(int& playerChoice) {
 }
 
 bool ConditionVerification(std::vector<Condition> conditions) {
+    if (conditions.size() == 0) return true; // If there is no conditions, return true
+
+    bool result = true;
+
     for (int i = 0; i < conditions.size(); i++)
     {
-        if (!conditions[i].IsVerified()) return false;
+        result = result && conditions[i].IsVerified();
     }
-    return true;
+
+    return result;
 }
 void ActivateActions(std::vector<Action> actions) {
     for (int i = 0; i < actions.size(); i++)
