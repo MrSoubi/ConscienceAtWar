@@ -43,10 +43,15 @@ bool Condition::IsSuperiorKarma() {
 int Condition::GetKarmaValue()
 {
 	if (IsSuperiorKarma()) {
-		std::string d = Text().substr(5);
-		return std::stoi(Text().substr(5));
+		std::string s = Text().substr(5);
+		if (s[0] == '-') return -std::stoi(Text().substr(6));
+		else return std::stoi(Text().substr(5));
 	}
-	else return std::stoi(Text().substr(6));
+	else {
+		std::string s = Text().substr(5);
+		if (s[0] == '-') return -std::stoi(Text().substr(6));
+		else return std::stoi(Text().substr(5));
+	}
 }
 
 bool Condition::IsVerified()
