@@ -1,4 +1,15 @@
+#pragma once
+
+#include <vector>
+#include <string>
+#include <iostream>
+#include <chrono>
+#include <future>
+#include <iomanip>
+#include <conio.h>
+
 #include "Scene.h"
+
 Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Choice> choices, int timer) {
 	this->name = name;
 	this->paragraphs = paragraphs;
