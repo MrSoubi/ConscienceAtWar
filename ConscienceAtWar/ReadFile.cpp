@@ -162,7 +162,7 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 std::vector<Choice> ReadFile::SetChoices(std::vector<std::string> currentTxt) {
 	std::vector<Choice> choices;
 	
-	int choicesCount = (int)currentTxt.size() / 5;
+	int choicesCount = currentTxt.size() / 5;
 
 	int timeOffset;
 	std::string text;
