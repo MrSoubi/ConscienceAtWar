@@ -19,9 +19,9 @@ int posToContinueInContent;
 std::vector<Scene> ReadFile::Start(int argc, char* argv[]) {
 	ReadFile::Read(argv[1]);
 
-	for (int i = 1; i < lignes.size(); i++)
+	for (int i = 1; i < lignes.size(); i++) // Excel adds an empty line at the end of the file, it might cause problems.
 	{
-		std::string currentSceneTxt = lignes[i];
+		std::string currentSceneTxt = lignes[i] + ";"; // Add a ';' at the end of each line because Excel does not.
 		if(currentSceneTxt.length() > 50) scenes.push_back(ReadFile::SetScene(currentSceneTxt));
 	}
 
