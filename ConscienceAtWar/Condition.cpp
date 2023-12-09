@@ -28,6 +28,7 @@ bool Condition::IsInInventory()
 	return result;
 }
 
+// Doesn't check if the condition is a karma condition !
 bool Condition::IsVerified()
 {
 	if (IsNegative()) {

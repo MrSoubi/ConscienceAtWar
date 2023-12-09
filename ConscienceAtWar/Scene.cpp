@@ -1,14 +1,18 @@
 #pragma once
 
-#include <vector>
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
 #include <chrono>
 #include <future>
 #include <iomanip>
 #include <conio.h>
 
+#include "Paragraph.h"
+#include "Choice.h"
+
 #include "Scene.h"
+
 
 Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Choice> choices, int timer) {
 	this->name = name;
@@ -71,7 +75,7 @@ void Scene::Display(std::vector<Scene> scene) {
     MoveToConsoleLine(choicesDisplayPos);
 
     for (int i = 0; i < choices.size(); i++) {
-        if (choices[i].timeOffSet <= 0) {          
+        if (choices[i].timeOffSet <= 0 && ConditionVerification(choices[i].conditions)) {
             std::cout << inputNumber << ". "; choices[i].Display(10);
             inputNumber++;
             choicesDisplayPos++;
