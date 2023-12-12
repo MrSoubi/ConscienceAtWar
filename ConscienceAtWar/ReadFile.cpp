@@ -16,31 +16,30 @@ std::vector<Scene> scenes;
 
 int posToContinueInContent;
 
-void ReadFile::Start(std::string tmpTest) {
-	ReadFile::Read(tmpTest);
+std::vector<Scene> ReadFile::Start(int argc, char* argv[]) {
+	ReadFile::Read(argv[1]);
 
-	/*for (int i = 1; i < lignes.size(); i++)
+	for (int i = 1; i < lignes.size(); i++) // Excel adds an empty line at the end of the file, it might cause problems.
 	{
-		ReadFile::SetScene(lignes[i]);
-	}*/
+		std::string currentSceneTxt = lignes[i] + ";"; // Add a ';' at the end of each line because Excel does not.
+		if(currentSceneTxt.length() > 50) scenes.push_back(ReadFile::SetScene(currentSceneTxt));
+	}
 
-	ReadFile::SetScene(tmpTest);
+	return scenes;
 }
 
 void ReadFile::Read(std::string path) {
 	std::string content;
+
 	std::fstream infile;
 	infile.open(path, std::fstream::in);
 
-	while (getline(infile, content))
-	{
-		ReadFile::AddLigne(content);
-	}
+	while (getline(infile, content)) ReadFile::AddLigne(content);
 
 	infile.close();
 }
 
-void ReadFile::SetScene(std::string currentTxt) {
+Scene ReadFile::SetScene(std::string currentTxt) {
 	std::vector<std::string> currentSceneContent = ReadFile::TidyUpScene(currentTxt);
 	std::vector<std::string> choicesTxt;
 	
@@ -56,7 +55,8 @@ void ReadFile::SetScene(std::string currentTxt) {
 			sceneName = currentSceneContent[i];
 			break;
 		case 1:
-			sceneTimer = stof(currentSceneContent[i]);
+			if (currentSceneContent[i] == "") sceneTimer = 0;
+			else sceneTimer = stof(currentSceneContent[i]);
 			break;
 		case 2:
 			sceneParagraph = ReadFile::SetParagraphs(currentSceneContent[i]);
@@ -66,52 +66,9 @@ void ReadFile::SetScene(std::string currentTxt) {
 			break;
 		}
 	}
-
 	choices = ReadFile::SetChoices(choicesTxt);
 
-	std::cout << "Scene infos" << std::endl;
-	std::cout << sceneName << std::endl
-		<< sceneTimer << std::endl << std::endl;
-
-	std::cout << "Scene Paragraph" << std::endl;
-
-	for (int i = 0; i < sceneParagraph.size(); i++)
-	{
-		std::cout << sceneParagraph[i].text << std::endl << sceneParagraph[i].timeOffSet << std::endl;
-
-		std::cout << "paragraph condition" << std::endl;
-
-		for (int j = 0; j < sceneParagraph[i].conditions.size(); j++)
-		{
-			std::cout << sceneParagraph[i].conditions[j].name << std::endl;
-		}
-		std::cout << "paragraph actions" << std::endl;
-
-		for (int j = 0; j < sceneParagraph[i].actions.size(); j++)
-		{
-			std::cout << sceneParagraph[i].actions[j].text << std::endl;
-		}
-	}
-
-	std::cout << "Scene choices" << std::endl;
-
-	for (int i = 0; i < choices.size(); i++)
-	{
-		std::cout << choices[i].text << std::endl << choices[i].timeOffSet << std::endl << choices[i].link << std::endl;
-
-		std::cout << "choice condition" << std::endl;
-
-		for (int j = 0; j < choices[i].conditions.size(); j++)
-		{
-			std::cout << choices[i].conditions[j].name << std::endl;
-		}
-		std::cout << "choice action" << std::endl;
-
-		for (int j = 0; j < choices[i].actions.size(); j++)
-		{
-			std::cout << choices[i].actions[j].text << std::endl;
-		}
-	}
+	return *new Scene(sceneName, sceneParagraph, choices, sceneTimer);
 }
 
 std::vector<std::string> ReadFile::TidyUpScene(std::string content) {
@@ -182,13 +139,14 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 		switch (i)
 		{
 		case 0:
-			timeOffSet = stoi(tmpTxt);
+			if (tmpTxt == "") timeOffSet = 0;
+			else timeOffSet = stoi(tmpTxt);
 			break;
 		case 1:
-			conditions = ReadFile::ReadCondition(tmpTxt);
+			actions = ReadFile::ReadAction(tmpTxt);
 			break;
 		case 2:
-			actions = ReadFile::ReadAction(tmpTxt);
+			conditions = ReadFile::ReadCondition(tmpTxt);
 			break;
 		}
 	}
@@ -204,7 +162,7 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 std::vector<Choice> ReadFile::SetChoices(std::vector<std::string> currentTxt) {
 	std::vector<Choice> choices;
 	
-	int choicesCount = (int)currentTxt.size() / 5;
+	int choicesCount = currentTxt.size() / 5;
 
 	int timeOffset;
 	std::string text;
@@ -216,13 +174,14 @@ std::vector<Choice> ReadFile::SetChoices(std::vector<std::string> currentTxt) {
 	{
 		int tmp = i * 5;
 
-		timeOffset = stoi(currentTxt[tmp]);
+		if (currentTxt[tmp] == "") timeOffset = 0;
+		else timeOffset = stoi(currentTxt[tmp]);
 		text = currentTxt[tmp + 1];
 		conditions = ReadFile::ReadCondition(currentTxt[tmp + 2]);
 		actions = ReadFile::ReadAction(currentTxt[tmp + 3]);
 		link = currentTxt[tmp + 4];
 
-		choices.emplace_back(text, conditions, actions, timeOffset, link);
+		if (text != "")	choices.emplace_back(text, conditions, actions, timeOffset, link);
 	}
 
 	return choices;
@@ -246,7 +205,7 @@ std::vector<Condition> ReadFile::ReadCondition(std::string currenttxt) {
 	}
 
 	currentCondition.name = currentContent;
-	conditions.push_back(currentCondition);
+	if (currentCondition.name != "") conditions.push_back(currentCondition); // Do not push back an empty condition
 	currentContent = "";
 
 	return conditions;
@@ -268,7 +227,7 @@ std::vector<Action> ReadFile::ReadAction(std::string currenttxt) {
 		}
 	}
 	currentAction.text = currentContent;
-	actions.push_back(currentAction);
+	if (currentAction.text != "") actions.push_back(currentAction); // Do not push back an empty action
 	currentContent = "";
 
 	return actions;

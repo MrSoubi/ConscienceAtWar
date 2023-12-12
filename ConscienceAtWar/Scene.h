@@ -1,14 +1,20 @@
+#pragma once
+
+#include <string>
+#include <vector>
+
 #include "Paragraph.h"
+#include "Choice.h"
 
 class Scene
 {
 public:
-	string name;
-	vector<Paragraph> paragraphs;
-	vector<Choice> choices;
+	std::string name;
+	std::vector<Paragraph> paragraphs;
+	std::vector<Choice> choices;
 	int timer;
 
-	Scene(string name, vector<Paragraph> paragraphs, vector<Choice> choices, int timer);
+	Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Choice> choices, int timer);
 
-	void Display(vector<Scene> scene);
+	void Display(std::vector<Scene> scene);
 };

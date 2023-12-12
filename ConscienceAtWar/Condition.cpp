@@ -28,23 +28,41 @@ bool Condition::IsInInventory()
 	return result;
 }
 
-bool Condition::IsVerified()
+bool Condition::IsKarmaCondition()
 {
-	if (IsNegative()) {
-		if (utils::IsInInventory(Text())) {
-			return false;
-		}
-		else {
-			return true;
-		}
+	if (name.find("karma") != std::string::npos) {
+		return true;
+	}
+	return false;
+}
+
+bool Condition::IsSuperiorKarma() {
+	return name[0] != '!';
+}
+
+int Condition::GetKarmaValue()
+{
+	if (IsSuperiorKarma()) {
+		std::string s = Text().substr(5);
+		if (s[0] == '-') return -std::stoi(Text().substr(6));
+		else return std::stoi(Text().substr(5));
 	}
 	else {
-		if (utils::IsInInventory(Text())) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		std::string s = Text().substr(5);
+		if (s[0] == '-') return -std::stoi(Text().substr(6));
+		else return std::stoi(Text().substr(5));
+	}
+}
+
+bool Condition::IsVerified()
+{
+	if (IsKarmaCondition()) {
+		if (IsSuperiorKarma()) return Program::karma >= GetKarmaValue();
+		else return Program::karma <= GetKarmaValue();
+	}
+	else {
+		if (IsNegative()) return !utils::IsInInventory(Text());
+		else return utils::IsInInventory(Text());
 	}
 }
 

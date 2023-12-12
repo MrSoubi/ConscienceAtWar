@@ -14,16 +14,19 @@ Action::Action(std::string text) {
 	this->text = text;
 }
 
+// Returns true if the first character is '+'
 bool Action::IsAdditive()
 {
 	return text[0] == '+';
 }
 
+// Returns true if the first character is '-'
 bool Action::IsSubtractive()
 {
 	return text[0] == '-';
 }
 
+// Returns the text without the first character (+ or -)
 std::string Action::Text()
 {
 	std::string textPart;
@@ -35,14 +38,16 @@ std::string Action::Text()
 	return textPart;
 }
 
+// Returns true if the text contains the word "karma"
 bool Action::IsKarmaAction()
 {
-	if (text.find("karma") > 0) {
+	if (text.find("karma") != std::string::npos) {
 		return true;
 	}
 	return false;
 }
 
+// Returns the absolute karma value of the action
 int Action::GetKarmaValue()
 {
 	return std::stoi(Text().substr(5));
@@ -58,8 +63,11 @@ void Action::Activate()
 			Program::karma -= GetKarmaValue();
 		}
 	}
-	else if (utils::IsInInventory(Text()) && IsSubtractive()){
-
+	else if (utils::IsInInventory(Text()) && IsSubtractive()) {
+		utils::RemoveFromInventory(Text());
+	}
+	else if (!utils::IsInInventory(Text()) && IsAdditive()){
+		utils::AddToInventory(Text());
 	}
 }
 
