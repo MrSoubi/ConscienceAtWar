@@ -8,8 +8,6 @@
 
 std::string tmpTest = "";
 
-std::string dontCloseCmdWindows;
-
 int Program::karma = 0;
 std::vector<std::string> Program::inventory = std::vector<std::string>{};
 
@@ -19,5 +17,5 @@ int main(int argc, char* argv[]) {
 
 	scenes[0].Display(scenes);
 
-	std::cin >> dontCloseCmdWindows;
+	return 0;
 }

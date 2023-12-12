@@ -12,6 +12,8 @@
 
 #include "Paragraph.h"
 #include "Choice.h"
+#include "utils.h"
+#include "Program.h"
 
 #include "Scene.h"
 
@@ -39,7 +41,6 @@ void MoveToConsoleLine(int line) {
 
 void GetUserChoice(int& playerChoice) {
     playerChoice = _getch() - '0';
-    std::cout << "hello";
 }
 
 bool ConditionVerification(std::vector<Condition> conditions) {
@@ -61,12 +62,22 @@ void ActivateActions(std::vector<Action> actions) {
     }
 }
 
-void Scene::Display(std::vector<Scene> scene) {
+void Scene::Display(std::vector<Scene> scenes) {
     int timerDisplayPos = 2;
     int paragraphsDisplayPos = timerDisplayPos + 3;
     int choicesDisplayPos = paragraphsDisplayPos + 15;
 
     int inputNumber = 1;
+
+    std::string tmp;
+
+    if (name == "Scene 1") {
+        utils::ResetInventory();
+        utils::ResetKarma();
+    }
+    else if (name == "QuitScene") {
+        exit(0);
+    }
 
     system("cls");
     blockConsoleResize();
@@ -147,23 +158,21 @@ void Scene::Display(std::vector<Scene> scene) {
         }
         else if (future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) { //Input du joueur
             if (playerChoice > 0 && playerChoice < inputNumber) {
-                std::cout << playerChoice << inputNumber;
                 playerChoice -= 1;
-                for (int i = 0; i < scene.size(); i++) {
-                    if (choices[playerChoice].link == scene[i].name) {
+                for (int i = 0; i < scenes.size(); i++) {
+                    if (choices[playerChoice].link == scenes[i].name) {
                         if (choices[playerChoice].actions.size() > 0) ActivateActions(choices[playerChoice].actions);
                         system("cls");
-                        scene[i].Display(scene);
+                        scenes[i].Display(scenes);
                     }
                 }
             }
             else {
-                std::cout << "bad input";
                 future = std::async(GetUserChoice, std::ref(playerChoice));
             }
         }
     }
     if (timer > 0) {
-        scene[0].Display(scene); //Fin du chrono
+        scenes[0].Display(scenes); //Fin du chrono
     }
 }
