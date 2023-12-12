@@ -97,6 +97,12 @@ std::vector<Paragraph> ReadFile::SetParagraphs(std::string currentTxt) {
 	int indexStart = 0;
 	int indexA = 0;
 	int indexEnd;
+
+	int pos;
+	while ((pos = currentTxt.find("\"\"")) != std::string::npos) {
+		currentTxt = currentTxt.replace(pos, 2, "\"");
+	}
+
 	while (paragraphsToRead) {
 
 		// Recherche de l'index venant juste après le 6e ']'
@@ -152,7 +158,7 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 	}
 
 	indexStart = currentTxt.find("]]", indexEnd) + 2;
-	indexEnd = currentTxt.length() - 1;
+	indexEnd = currentTxt.length();
 	tmpTxt = currentTxt.substr(indexStart, indexEnd - indexStart);
 	text = tmpTxt;
 
