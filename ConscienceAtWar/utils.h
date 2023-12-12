@@ -11,7 +11,8 @@ public:
 	static int GetIndexInInventory(std::string text);
 	static void RemoveFromInventory(std::string text);
 	static void AddToInventory(std::string text);
-
+	static void ResetInventory();
+	static void ResetKarma();
 	static int Pow(int n, int p);
 };
 

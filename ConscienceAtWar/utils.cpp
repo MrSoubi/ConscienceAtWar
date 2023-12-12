@@ -35,6 +35,16 @@ void utils::AddToInventory(std::string text)
 	Program::inventory.push_back(text);
 }
 
+void utils::ResetInventory()
+{
+	Program::inventory.clear();
+}
+
+void utils::ResetKarma()
+{
+	Program::karma = 0;
+}
+
 int utils::Pow(int n, int p)
 {
 	int result = n;
