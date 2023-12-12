@@ -48,7 +48,7 @@ void ActivateActions(std::vector<Action> actions) {
     }
 }
 
-void Scene::Display(std::vector<Scene> scene) {
+void Scene::Display(std::vector<Scene> scene) {    
     int timerDisplayPos = 2;
     int paragraphsDisplayPos = timerDisplayPos + 3;
     int choicesDisplayPos = paragraphsDisplayPos + 8;

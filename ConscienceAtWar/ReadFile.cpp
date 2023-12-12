@@ -182,6 +182,11 @@ std::vector<Choice> ReadFile::SetChoices(std::vector<std::string> currentTxt) {
 
 		if (currentTxt[tmp] == "") timeOffset = 0;
 		else timeOffset = stoi(currentTxt[tmp]);
+
+		int pos;
+		while ((pos = currentTxt[tmp + 1].find("\"\"")) != std::string::npos) {
+			currentTxt[tmp + 1] = currentTxt[tmp + 1].replace(pos, 2, "\"");
+		}
 		text = currentTxt[tmp + 1];
 		conditions = ReadFile::ReadCondition(currentTxt[tmp + 2]);
 		actions = ReadFile::ReadAction(currentTxt[tmp + 3]);
