@@ -63,8 +63,8 @@ void ActivateActions(std::vector<Action> actions) {
 }
 
 void Scene::Display(std::vector<Scene> scenes) {
-    int timerDisplayPos = 2;
-    int paragraphsDisplayPos = timerDisplayPos + 3;
+    int timerDisplayPos = 0;
+    int paragraphsDisplayPos = timerDisplayPos + 5;
     int choicesDisplayPos = paragraphsDisplayPos + 15;
 
     int inputNumber = 1;
@@ -81,25 +81,32 @@ void Scene::Display(std::vector<Scene> scenes) {
 
     system("cls");
     blockConsoleResize();
-    std::cout << "Scene : " << name << std::endl;
 
     MoveToConsoleLine(timerDisplayPos);
-
-    std::cout << "\033[2K\r" << std::endl;
-    std::cout << "Temps restant : " << timer << ".00 secondes";
+    std::cout << " -------------------" << std::endl;
+    std::cout << "\033[2K\r";
+    if (timer < 10) {
+        std::cout << "| Time left : 0" << timer << ".00 |" << std::endl;
+    }
+    else {
+        std::cout << "| Time left : " << timer << ".00 |" << std::endl;
+    }
+    std::cout << " -------------------" << std::endl;
 
     MoveToConsoleLine(paragraphsDisplayPos);
 
+    std::cout << "-------------------------------------------------------------------------------------------------------------" << std::endl<<std::endl;
+
     for (int i = 0; i < paragraphs.size(); i++) {
         if (paragraphs[i].timeOffSet <= 0) {
-            paragraphs[i].Display(10);
+            std::cout << "-> "; paragraphs[i].Display(10); std::cout << std::endl;
             paragraphsDisplayPos++;
         }
     }
 
     MoveToConsoleLine(choicesDisplayPos);
 
-    std::cout << "-----------------------------------------" << std::endl;
+    std::cout << "-------------------------------------------------------------------------------------------------------------" << std::endl;
     choicesDisplayPos += 2;
 
     MoveToConsoleLine(choicesDisplayPos);
@@ -151,8 +158,9 @@ void Scene::Display(std::vector<Scene> scenes) {
             // Affichage du temps restant
             if (timer > 0) {
                 MoveToConsoleLine(timerDisplayPos);
-                std::cout << "\033[2K\r" << std::endl;
-                std::cout << "Temps restant : " << std::fixed << std::setprecision(2) << remaining_time << " secondes" << std::flush;
+                std::cout << std::endl;
+                std::cout << "\033[2K\r";
+                std::cout << "| Time left : 0" << std::fixed << std::setprecision(2) << remaining_time << " |" << std::flush;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
@@ -172,7 +180,5 @@ void Scene::Display(std::vector<Scene> scenes) {
             }
         }
     }
-    if (timer > 0) {
-        scenes[0].Display(scenes); //Fin du chrono
-    }
+    scenes[0].Display(scenes);
 }
