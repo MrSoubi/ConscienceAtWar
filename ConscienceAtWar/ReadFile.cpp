@@ -117,7 +117,7 @@ std::vector<Paragraph> ReadFile::SetParagraphs(std::string currentTxt) {
 			indexStart = indexEnd;
 			indexA = indexEnd;
 		}else{
-			indexEnd = currentTxt.length() - 1;
+			indexEnd = currentTxt.length();
 			currentParagraphTxt = currentTxt.substr(indexStart, indexEnd);
 			allParagraph.push_back(ReadFile::ReadParagraph(currentParagraphTxt));
 			paragraphsToRead = false;

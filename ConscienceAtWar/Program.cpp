@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <windows.h>
 #include "ReadFile.h"
 #include "Program.h"
 

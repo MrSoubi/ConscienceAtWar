@@ -25,16 +25,6 @@ Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Ch
     this->timer = timer;
 }
 
-void blockConsoleResize() {
-    HWND console = GetConsoleWindow();
-    if (console != NULL) {
-        SetWindowLong(console, GWL_STYLE, GetWindowLong(console, GWL_STYLE) & ~WS_SIZEBOX);
-        SMALL_RECT windowRect = { 0, 0, 150, 50 }; // Taille souhaitée de la console
-        SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), { 80, 30 });
-        SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &windowRect);
-    }
-}
-
 void MoveToConsoleLine(int line) {
     std::cout << "\033[" << line << ";0H";
 }
@@ -80,12 +70,14 @@ void Scene::Display(std::vector<Scene> scenes) {
     }
 
     system("cls");
-    blockConsoleResize();
 
     MoveToConsoleLine(timerDisplayPos);
     std::cout << " -------------------" << std::endl;
     std::cout << "\033[2K\r";
-    if (timer < 10) {
+    if (timer <= 0) {
+        std::cout << "| Time left : NONE  |" << std::endl;
+    }
+    else if (timer < 10) {
         std::cout << "| Time left : 0" << timer << ".00 |" << std::endl;
     }
     else {
