@@ -20,5 +20,5 @@ public:
 
 	bool CanBeDisplayed();
 
-	void Display(int speed);
+	void Display(int lengh, int speed);
 };

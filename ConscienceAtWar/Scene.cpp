@@ -52,9 +52,51 @@ void ActivateActions(std::vector<Action> actions) {
     }
 }
 
+int GetCenter() {
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    return csbi.srWindow.Right - csbi.srWindow.Left + 1;
+}
+
+void PrintLine(int lengh) {
+    for (int i = 0; i <= lengh + 1; i++) {
+        std::cout << (char)205;
+    }
+}
+
+void PrintSpace(int lengh) {
+    for (int i = 0; i <= lengh + 1; i++) {
+        std::cout << " ";
+    }
+}
+
+void MyTimer(int lengh, std::string timerText)
+{
+    SetConsoleCP(437);
+    SetConsoleOutputCP(437);
+
+    PrintSpace((lengh / 2) - timerText.size());
+    std::cout << (char)201;
+    PrintLine(timerText.size());
+
+    std::cout << (char)187 << "\n";
+    PrintSpace((lengh / 2) - timerText.size());
+    std::cout << (char)197 << " " << timerText << " " << (char)197 << "\n";
+
+    PrintSpace((lengh / 2) - timerText.size());
+    std::cout << (char)200;
+    PrintLine(timerText.size());
+    std::cout << (char)188;
+}
+
 void Scene::Display(std::vector<Scene> scenes) {
-    int timerDisplayPos = 0;
-    int paragraphsDisplayPos = timerDisplayPos + 5;
+    std::string timerText;
+    timer <= 0 ? timerText = "Time left : NONE"
+        : timer < 10 ? timerText = "Time left : 0" + std::to_string(timer) + ".00s"
+            : timerText = "Time left : " + std::to_string(timer) + ".00s";
+
+    int paragraphsDisplayPos = 5;
     int choicesDisplayPos = paragraphsDisplayPos + 15;
 
     int inputNumber = 1;
@@ -71,45 +113,62 @@ void Scene::Display(std::vector<Scene> scenes) {
 
     system("cls");
 
-    MoveToConsoleLine(timerDisplayPos);
-    std::cout << " -------------------" << std::endl;
-    std::cout << "\033[2K\r";
-    if (timer <= 0) {
-        std::cout << "| Time left : NONE  |" << std::endl;
-    }
-    else if (timer < 10) {
-        std::cout << "| Time left : 0" << timer << ".00 |" << std::endl;
-    }
-    else {
-        std::cout << "| Time left : " << timer << ".00 |" << std::endl;
-    }
-    std::cout << " -------------------" << std::endl;
+    MyTimer(GetCenter(), timerText);
 
     MoveToConsoleLine(paragraphsDisplayPos);
 
-    std::cout << "-------------------------------------------------------------------------------------------------------------" << std::endl<<std::endl;
+    PrintSpace(1);
+    std::cout << (char)201;
+    PrintLine(GetCenter() - 10);
+    std::cout << (char)187 << "\n";
+
+    for (int i = 0; i < 15; i++) {
+        PrintSpace(1);
+        std::cout << (char)186; PrintSpace(GetCenter() - 10); std::cout << (char)186 << "\n";
+    }
+
+    MoveToConsoleLine(choicesDisplayPos + 1);
+
+    PrintSpace(1);
+    std::cout << (char)200;
+    PrintLine(15);
+    std::cout << (char)203;
+    PrintLine(GetCenter()-46);
+    std::cout << (char)203;
+    PrintLine(15);
+    std::cout << (char)188 << "\n";
+
+    for (int i = 0; i < 8; i++) {
+        PrintSpace(19);
+        std::cout << (char)186; PrintSpace(GetCenter() - 46); std::cout << (char)186 << "\n";
+    }
+
+    PrintSpace(19);
+    std::cout << (char)200;
+    PrintLine(GetCenter() - 46);
+    std::cout << (char)188;
+
+    MoveToConsoleLine(paragraphsDisplayPos + 1);
 
     for (int i = 0; i < paragraphs.size(); i++) {
         if (paragraphs[i].timeOffSet <= 0) {
-            std::cout << "-> "; paragraphs[i].Display(10); std::cout << std::endl;
+            paragraphs[i].Display(GetCenter(), 10);
             paragraphsDisplayPos++;
         }
     }
 
-    MoveToConsoleLine(choicesDisplayPos);
-
-    std::cout << "-------------------------------------------------------------------------------------------------------------" << std::endl;
     choicesDisplayPos += 2;
 
     MoveToConsoleLine(choicesDisplayPos);
 
     for (int i = 0; i < choices.size(); i++) {
         if (choices[i].timeOffSet <= 0 && ConditionVerification(choices[i].conditions)) {
-            std::cout << inputNumber << ". "; choices[i].Display(10);
+            choices[i].Display(GetCenter(), 10, inputNumber);
             inputNumber++;
             choicesDisplayPos++;
         }
     }
+
     int playerChoice = -1;
     while (_kbhit()) {
         playerChoice = _getch();
@@ -131,7 +190,7 @@ void Scene::Display(std::vector<Scene> scenes) {
                         paragraphs[i].displayed = true;
                         MoveToConsoleLine(paragraphsDisplayPos);
                         paragraphsDisplayPos++;
-                        paragraphs[i].Display(10);
+                        paragraphs[i].Display(GetCenter(), 10);
                         if (paragraphs[i].actions.size() > 0) ActivateActions(paragraphs[i].actions);
                     }
                 }
@@ -141,7 +200,7 @@ void Scene::Display(std::vector<Scene> scenes) {
                     if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() >= choices[i].timeOffSet * 1000) {
                         choices[i].displayed = true;
                         MoveToConsoleLine(choicesDisplayPos);
-                        std::cout << inputNumber << ". "; choices[i].Display(10);
+                        choices[i].Display(GetCenter(), 10, inputNumber);
                         inputNumber++;
                         choicesDisplayPos++;
                     }
@@ -149,10 +208,12 @@ void Scene::Display(std::vector<Scene> scenes) {
             }
             // Affichage du temps restant
             if (timer > 0) {
-                MoveToConsoleLine(timerDisplayPos);
+                MoveToConsoleLine(0);
                 std::cout << std::endl;
                 std::cout << "\033[2K\r";
-                std::cout << "| Time left : 0" << std::fixed << std::setprecision(2) << remaining_time << " |" << std::flush;
+                PrintSpace((GetCenter() / 2) - timerText.size());
+                remaining_time < 10 ? std::cout << "| Time left : 0" << std::fixed << std::setprecision(2) << remaining_time << "s " << (char)197 << std::flush
+                    : std::cout << "| Time left : " << std::fixed << std::setprecision(2) << remaining_time << "s " << (char)197 << std::flush;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }

@@ -17,5 +17,5 @@ public:
 
 	Choice(std::string text, std::vector<Condition> conditions, std::vector<Action> actions, int timeOffSet, std::string link);
 
-	void Display(int speed);
+	void Display(int lengh, int speed, int number);
 };
