@@ -28,14 +28,18 @@ void Choice::Display(int lengh, int speed, int number) {
     }
     std::cout << (char)186 << " " << number <<". ";
     for (char c : text) {
-        if (counter <= lengh - 18) {
+        if (counter <= lengh - 54) {
             std::cout << c << std::flush;
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
             counter++;
         }
         else {
             std::cout << "     ";
-            std::cout << (char)186 << std::endl << "   " << (char)186 << "    ";
+            std::cout << (char)186 << std::endl;
+            for (int i = 0; i <= 20; i++) {
+                std::cout << " ";
+            }
+            std::cout << (char)186 << "    ";
             counter = 0;
         }
     }

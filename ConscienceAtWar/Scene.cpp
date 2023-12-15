@@ -92,7 +92,7 @@ void MyTimer(int lengh, std::string timerText)
 
 void Scene::Display(std::vector<Scene> scenes) {
     std::string timerText;
-    timer <= 0 ? timerText = "Time left : NONE"
+    timer <= 0 ? timerText = "                 "
         : timer < 10 ? timerText = "Time left : 0" + std::to_string(timer) + ".00s"
             : timerText = "Time left : " + std::to_string(timer) + ".00s";
 
@@ -165,7 +165,7 @@ void Scene::Display(std::vector<Scene> scenes) {
         if (choices[i].timeOffSet <= 0 && ConditionVerification(choices[i].conditions)) {
             choices[i].Display(GetCenter(), 10, inputNumber);
             inputNumber++;
-            choicesDisplayPos++;
+            choices[i].text.size() >= GetCenter() - 54 ? choicesDisplayPos += 2 : choicesDisplayPos++;
         }
     }
 
@@ -202,7 +202,7 @@ void Scene::Display(std::vector<Scene> scenes) {
                         MoveToConsoleLine(choicesDisplayPos);
                         choices[i].Display(GetCenter(), 10, inputNumber);
                         inputNumber++;
-                        choicesDisplayPos++;
+                        choices[i].text.size() >= GetCenter() - 54 ? choicesDisplayPos += 2 : choicesDisplayPos++;
                     }
                 }
             }
