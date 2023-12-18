@@ -60,7 +60,7 @@ void Paragraph::Display(int lengh, int speed) {
         else {
 			std::cout << "     ";
 			std::cout << (char)186 << std::endl << "   " << (char)186 << "    " << c << std::flush;
-            counter = 0;
+            counter = 1;
         }
     }
     std::cout << std::endl << std::endl;

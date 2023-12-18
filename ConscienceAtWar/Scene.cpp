@@ -155,9 +155,11 @@ void Scene::Display(std::vector<Scene> scenes) {
     MoveToConsoleLine(paragraphsDisplayPos + 1);
 
     for (int i = 0; i < paragraphs.size(); i++) {
-        if (paragraphs[i].timeOffSet <= 0) {
+        if (paragraphs[i].timeOffSet <= 0 && ConditionVerification(paragraphs[i].conditions)) {
+            std::cout << paragraphs[i].timeOffSet;
             paragraphs[i].Display(GetCenter(), 10);
             paragraphsDisplayPos++;
+            if (paragraphs[i].actions.size() > 0) ActivateActions(paragraphs[i].actions);
         }
     }
 
