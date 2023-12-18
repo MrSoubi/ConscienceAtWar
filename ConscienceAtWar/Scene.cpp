@@ -7,6 +7,8 @@
 #include <future>
 #include <iomanip>
 #include <conio.h>
+#include <cstdlib>
+#include <ctime>
 
 #include <windows.h>
 
@@ -91,6 +93,8 @@ void MyTimer(int lengh, std::string timerText)
 }
 
 void Scene::Display(std::vector<Scene> scenes) {
+    srand(static_cast<unsigned int>(time(nullptr)));
+
     std::string timerText;
     timer <= 0 ? timerText = "                 "
         : timer < 10 ? timerText = "Time left : 0" + std::to_string(timer) + ".00s"
@@ -233,5 +237,8 @@ void Scene::Display(std::vector<Scene> scenes) {
             }
         }
     }
-    scenes[0].Display(scenes);
+    keybd_event('A', 0, 0, 0);
+    keybd_event('A', 0, KEYEVENTF_KEYUP, 0);
+    playerChoice = rand() % choices.size() + 1;
+    scenes[playerChoice].Display(scenes);
 }
