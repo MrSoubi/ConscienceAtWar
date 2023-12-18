@@ -17,5 +17,4 @@ public:
 	Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Choice> choices, int timer);
 
 	void Display(std::vector<Scene> scene);
-	void MainDisplay(std::vector<Scene> scenes);
 };
