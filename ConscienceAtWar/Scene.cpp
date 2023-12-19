@@ -27,11 +27,11 @@ Scene::Scene(std::string name, std::vector<Paragraph> paragraphs, std::vector<Ch
     this->timer = timer;
 }
 
-void MoveToConsoleLine(int line) {
+void MoveToConsoleLine(int line) { //move console cursor
     std::cout << "\033[" << line << ";0H";
 }
 
-void GetUserChoice(int& playerChoice) {
+void GetUserChoice(int& playerChoice) { //get user choice
     playerChoice = _getch() - '0';
 }
 
@@ -47,14 +47,14 @@ bool ConditionVerification(std::vector<Condition> conditions) {
 
     return result;
 }
-void ActivateActions(std::vector<Action> actions) {
+void ActivateActions(std::vector<Action> actions) { //activate action 
     for (int i = 0; i < actions.size(); i++)
     {
         actions[i].Activate();
     }
 }
 
-int GetCenter() {
+int GetCenter() { //get showed console size
     CONSOLE_SCREEN_BUFFER_INFO csbi;
 
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -73,7 +73,7 @@ void PrintSpace(int lengh) {
     }
 }
 
-void MyTimer(int lengh, std::string timerText)
+void MyTimer(int lengh, std::string timerText) //print timer
 {
     SetConsoleCP(437);
     SetConsoleOutputCP(437);
@@ -92,7 +92,7 @@ void MyTimer(int lengh, std::string timerText)
     std::cout << (char)188;
 }
 
-void Scene::Display(std::vector<Scene> scenes) {
+void Scene::Display(std::vector<Scene> scenes) { //main displayer
     srand(static_cast<unsigned int>(time(nullptr)));
 
     std::string timerText;
@@ -102,7 +102,6 @@ void Scene::Display(std::vector<Scene> scenes) {
 
     int paragraphsDisplayPos = 5;
     int choicesDisplayPos = paragraphsDisplayPos + 15;
-
     int inputNumber = 1;
 
     std::string tmp;
@@ -117,7 +116,7 @@ void Scene::Display(std::vector<Scene> scenes) {
 
     system("cls");
 
-    MyTimer(GetCenter(), timerText);
+    MyTimer(GetCenter(), timerText); // print timer
 
     MoveToConsoleLine(paragraphsDisplayPos - 1);
 
@@ -154,7 +153,7 @@ void Scene::Display(std::vector<Scene> scenes) {
 
     MoveToConsoleLine(paragraphsDisplayPos);
 
-    for (int i = 0; i < paragraphs.size(); i++) {
+    for (int i = 0; i < paragraphs.size(); i++) { //base paragraph display
         if (paragraphs[i].timeOffSet <= 0 && ConditionVerification(paragraphs[i].conditions)) {
             paragraphs[i].Display(GetCenter(), 10);
             paragraphsDisplayPos++;
@@ -166,7 +165,7 @@ void Scene::Display(std::vector<Scene> scenes) {
 
     MoveToConsoleLine(choicesDisplayPos);
 
-    for (int i = 0; i < choices.size(); i++) {
+    for (int i = 0; i < choices.size(); i++) { //base choice display
         if (choices[i].timeOffSet <= 0 && ConditionVerification(choices[i].conditions)) {
             choices[i].Display(GetCenter(), 10, inputNumber);
             inputNumber++;
@@ -175,21 +174,23 @@ void Scene::Display(std::vector<Scene> scenes) {
     }
 
     int playerChoice = -1;
+
     while (_kbhit()) {
         playerChoice = _getch();
     }
+
     auto future = std::async(GetUserChoice, std::ref(playerChoice));
 
     auto start_time = std::chrono::steady_clock::now();
     auto end_time = start_time + std::chrono::milliseconds(timer * 1000);
     bool displayed = false;
 
-    while (std::chrono::steady_clock::now() < end_time || timer <= 0) {
+    while (std::chrono::steady_clock::now() < end_time || timer <= 0) { //timer
         if (future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready) {
             auto current_time = std::chrono::steady_clock::now();
             auto remaining_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - current_time).count() / 1000.0;
 
-            for (int i = 0; i < paragraphs.size(); i++) {
+            for (int i = 0; i < paragraphs.size(); i++) { //new paragraph after delay displayer
                 if (paragraphs[i].displayed == false && paragraphs[i].timeOffSet > 0 && ConditionVerification(paragraphs[i].conditions)) {
                     if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() >= paragraphs[i].timeOffSet * 1000) {
                         paragraphs[i].displayed = true;
@@ -200,7 +201,7 @@ void Scene::Display(std::vector<Scene> scenes) {
                     }
                 }
             }
-            for (int i = 0; i < choices.size(); i++) {
+            for (int i = 0; i < choices.size(); i++) { //new choice after delay displayer
                 if (choices[i].displayed == false && choices[i].timeOffSet > 0 && ConditionVerification(choices[i].conditions)) {
                     if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() >= choices[i].timeOffSet * 1000) {
                         choices[i].displayed = true;
@@ -211,7 +212,7 @@ void Scene::Display(std::vector<Scene> scenes) {
                     }
                 }
             }
-            // Affichage du temps restant
+            //time left display
             if (timer > 0) {
                 MoveToConsoleLine(0);
                 std::cout << std::endl;
@@ -222,7 +223,7 @@ void Scene::Display(std::vector<Scene> scenes) {
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
-        else if (future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) { //Input du joueur
+        else if (future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) { //on player input
             if (playerChoice > 0 && playerChoice < inputNumber) {
                 playerChoice -= 1;
                 for (int i = 0; i < scenes.size(); i++) {
@@ -234,12 +235,12 @@ void Scene::Display(std::vector<Scene> scenes) {
                 }
             }
             else {
-                future = std::async(GetUserChoice, std::ref(playerChoice));
+                future = std::async(GetUserChoice, std::ref(playerChoice)); //bad player input
             }
         }
     }
     keybd_event('A', 0, 0, 0);
     keybd_event('A', 0, KEYEVENTF_KEYUP, 0);
     playerChoice = rand() % choices.size() + 1;
-    scenes[playerChoice].Display(scenes);
+    scenes[playerChoice].Display(scenes); //time out
 }
