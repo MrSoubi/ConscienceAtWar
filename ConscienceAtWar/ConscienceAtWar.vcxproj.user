@@ -4,4 +4,8 @@
     <LocalDebuggerCommandArguments>C:\Users\e_garnier4\Downloads\TEST_Karma.csv</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments>"C:\Users\e_garnier4\Downloads\TEST_All.csv"</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

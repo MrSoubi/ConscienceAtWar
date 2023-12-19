@@ -137,7 +137,7 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 	int indexStart = 0;
 	int indexEnd;
 
-	for (int i = 3; i > 0; i -= 1) {
+	for (int i = 2; i >= 0; i -= 1) {
 		indexStart = currentTxt.find("[[", indexStart) + 2;
 		indexEnd = currentTxt.find("]]", indexStart);
 		tmpTxt = currentTxt.substr(indexStart, indexEnd - indexStart);
@@ -145,14 +145,14 @@ Paragraph ReadFile::ReadParagraph(std::string currentTxt) {
 		switch (i)
 		{
 		case 0:
-			if (tmpTxt == "") timeOffSet = 0;
-			else timeOffSet = stoi(tmpTxt);
-			break;
-		case 1:
 			actions = ReadFile::ReadAction(tmpTxt);
 			break;
-		case 2:
+		case 1:
 			conditions = ReadFile::ReadCondition(tmpTxt);
+			break;
+		case 2:
+			if (tmpTxt == "") timeOffSet = 0;
+			else timeOffSet = stoi(tmpTxt);
 			break;
 		}
 	}

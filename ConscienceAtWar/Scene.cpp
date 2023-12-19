@@ -119,7 +119,7 @@ void Scene::Display(std::vector<Scene> scenes) {
 
     MyTimer(GetCenter(), timerText);
 
-    MoveToConsoleLine(paragraphsDisplayPos);
+    MoveToConsoleLine(paragraphsDisplayPos - 1);
 
     PrintSpace(1);
     std::cout << (char)201;
@@ -131,7 +131,7 @@ void Scene::Display(std::vector<Scene> scenes) {
         std::cout << (char)186; PrintSpace(GetCenter() - 10); std::cout << (char)186 << "\n";
     }
 
-    MoveToConsoleLine(choicesDisplayPos + 1);
+    MoveToConsoleLine(choicesDisplayPos);
 
     PrintSpace(1);
     std::cout << (char)200;
@@ -152,11 +152,10 @@ void Scene::Display(std::vector<Scene> scenes) {
     PrintLine(GetCenter() - 46);
     std::cout << (char)188;
 
-    MoveToConsoleLine(paragraphsDisplayPos + 1);
+    MoveToConsoleLine(paragraphsDisplayPos);
 
     for (int i = 0; i < paragraphs.size(); i++) {
         if (paragraphs[i].timeOffSet <= 0 && ConditionVerification(paragraphs[i].conditions)) {
-            std::cout << paragraphs[i].timeOffSet;
             paragraphs[i].Display(GetCenter(), 10);
             paragraphsDisplayPos++;
             if (paragraphs[i].actions.size() > 0) ActivateActions(paragraphs[i].actions);
