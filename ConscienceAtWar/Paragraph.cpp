@@ -54,7 +54,7 @@ void Paragraph::Display(int lengh, int speed) {
     for (char c : text) {
         if (counter <= lengh - 18) {
             std::cout << c << std::flush;
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(speed));
             counter++;
         }
         else {

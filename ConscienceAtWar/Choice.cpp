@@ -30,7 +30,7 @@ void Choice::Display(int lengh, int speed, int number) {
     for (char c : text) {
         if (counter <= lengh - 54) {
             std::cout << c << std::flush;
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(speed));
             counter++;
         }
         else {

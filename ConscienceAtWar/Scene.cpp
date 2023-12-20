@@ -169,7 +169,7 @@ void Scene::Display(std::vector<Scene> scenes) { //main displayer
 
     for (int i = 0; i < choices.size(); i++) { //base choice display
         if (choices[i].timeOffSet <= 0 && ConditionVerification(choices[i].conditions)) {
-            choices[i].Display(GetCenter(), 10, inputNumber);
+            choices[i].Display(GetCenter(), 0, inputNumber);
             inputNumber++;
             choices[i].text.size() >= GetCenter() - 54 ? choicesDisplayPos += 2 : choicesDisplayPos++;
         }
@@ -208,7 +208,7 @@ void Scene::Display(std::vector<Scene> scenes) { //main displayer
                     if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() >= choices[i].timeOffSet * 1000) {
                         choices[i].displayed = true;
                         MoveToConsoleLine(choicesDisplayPos);
-                        choices[i].Display(GetCenter(), 10, inputNumber);
+                        choices[i].Display(GetCenter(), 0, inputNumber);
                         inputNumber++;
                         choices[i].text.size() >= GetCenter() - 54 ? choicesDisplayPos += 2 : choicesDisplayPos++;
                     }
