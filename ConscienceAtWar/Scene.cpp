@@ -104,6 +104,8 @@ void Scene::Display(std::vector<Scene> scenes) { //main displayer
     int choicesDisplayPos = paragraphsDisplayPos + 15;
     int inputNumber = 1;
 
+    srand(time(0));
+
     std::string tmp;
 
     if (name == "Scene 1") {
@@ -155,8 +157,8 @@ void Scene::Display(std::vector<Scene> scenes) { //main displayer
 
     for (int i = 0; i < paragraphs.size(); i++) { //base paragraph display
         if (paragraphs[i].timeOffSet <= 0 && ConditionVerification(paragraphs[i].conditions)) {
+            paragraphsDisplayPos += paragraphs[i].text.size() / (GetCenter() - 18) + 2;
             paragraphs[i].Display(GetCenter(), 10);
-            paragraphsDisplayPos++;
             if (paragraphs[i].actions.size() > 0) ActivateActions(paragraphs[i].actions);
         }
     }
@@ -241,6 +243,13 @@ void Scene::Display(std::vector<Scene> scenes) { //main displayer
     }
     keybd_event('A', 0, 0, 0);
     keybd_event('A', 0, KEYEVENTF_KEYUP, 0);
-    playerChoice = rand() % choices.size() + 1;
-    scenes[playerChoice].Display(scenes); //time out
+    inputNumber -= 1;
+    playerChoice = rand() % inputNumber;
+    for (int i = 0; i < scenes.size(); i++) {
+        if (choices[playerChoice].link == scenes[i].name) {
+            if (choices[playerChoice].actions.size() > 0) ActivateActions(choices[playerChoice].actions);
+            system("cls");
+            scenes[i].Display(scenes);
+        }
+    }
 }
